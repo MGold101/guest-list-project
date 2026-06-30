@@ -4,7 +4,9 @@
   "scripts": {
     "build": "echo \"The build step is not required when using JavaScript!\" && exit 0",
     "cdk": "cdk",
-    "test": "jest"
+    "test": "jest",
+    "deploy": "cdk deploy --profile infrastructure_test InfrastructureTestStack",
+    "bootstrap": "cdk bootstrap --profile infrastructure_test"
   },
   "devDependencies": {
     "aws-cdk": "2.1128.1",
