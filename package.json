@@ -6,7 +6,8 @@
     "cdk": "cdk",
     "test": "jest",
     "deploy": "cdk deploy --profile infrastructure_test InfrastructureTestStack",
-    "bootstrap": "cdk bootstrap --profile infrastructure_test"
+    "bootstrap": "cdk bootstrap --profile infrastructure_test",
+    "destroy": "cdk destroy --profile infrastructure_test InfrastructureTestStack"
   },
   "devDependencies": {
     "aws-cdk": "2.1128.1",
