@@ -1,3 +1,5 @@
-export default function ViewPage() {
-  return <h1>View Guests</h1>;
+import ViewGuestsPage from '@/components/organisms/ViewGuestsPage';
+
+export default function Page() {
+  return <ViewGuestsPage />;
 }

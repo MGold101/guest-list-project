@@ -4,8 +4,22 @@ const { DynamoDBDocumentClient, PutCommand, ScanCommand} = require('@aws-sdk/lib
 const client = new DynamoDBClient({});
 const db = DynamoDBDocumentClient.from(client);
 
+const headers = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
+};
+
 exports.main = async function (event) {
   const tableName = process.env.TABLE_NAME;
+
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers,
+      body: '',
+    };
+  }
 
   if (event.httpMethod === 'GET') {
     const result = await db.send(
@@ -16,6 +30,7 @@ exports.main = async function (event) {
 
     return {
       statusCode: 200,
+      headers,
       body: JSON.stringify({
         guests: result.Items || [],
       }),
@@ -40,6 +55,7 @@ exports.main = async function (event) {
 
     return {
       statusCode: 201,
+      headers,
       body: JSON.stringify({
         message: 'Guest added successfully',
         guest,
@@ -49,6 +65,7 @@ exports.main = async function (event) {
 
   return {
     statusCode: 405,
+    headers,
     body: JSON.stringify({
       message: 'Method not allowed',
     }),
