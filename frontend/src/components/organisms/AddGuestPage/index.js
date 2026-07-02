@@ -1,9 +1,16 @@
 'use client';
 
 import { useState } from 'react';
+
+import PageHeading from '@/components/atoms/PageHeading';
+import BodyText from '@/components/atoms/BodyText';
+import GuestForm from '@/components/molecules/GuestForm';
+import PageLayout from '@/components/organisms/PageLayout';
+
 import { createGuest } from '@/services/guestService';
 
 export default function AddGuestPage() {
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -13,67 +20,59 @@ export default function AddGuestPage() {
   const [message, setMessage] = useState('');
 
   function handleChange(event) {
+
     const { name, value } = event.target;
 
     setFormData((currentData) => ({
       ...currentData,
       [name]: value,
     }));
+
   }
 
   async function handleSubmit(event) {
+
     event.preventDefault();
 
     try {
+
       await createGuest(formData);
 
-      setMessage('Guest added successfully');
+      setMessage('Guest added successfully.');
 
       setFormData({
         firstName: '',
         lastName: '',
         email: '',
       });
-    } catch (error) {
-      setMessage('Failed to add guest');
+
+    } catch {
+
+      setMessage('Failed to add guest.');
+
     }
+
   }
 
   return (
-    <main className="min-h-screen p-8">
-      <h1 className="text-3xl font-bold mb-6">Add Guest</h1>
+    <PageLayout>
 
-      <form onSubmit={handleSubmit} className="grid gap-4 max-w-md">
-        <input
-          name="firstName"
-          value={formData.firstName}
-          onChange={handleChange}
-          placeholder="First name"
-          className="border p-2 rounded"
-        />
+      <PageHeading>
+        Add Guest
+      </PageHeading>
 
-        <input
-          name="lastName"
-          value={formData.lastName}
-          onChange={handleChange}
-          placeholder="Last name"
-          className="border p-2 rounded"
-        />
+      <GuestForm
+        formData={formData}
+        onChange={handleChange}
+        onSubmit={handleSubmit}
+      />
 
-        <input
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          placeholder="Email"
-          className="border p-2 rounded"
-        />
+      {message && (
+        <div className="mt-6">
+          <BodyText>{message}</BodyText>
+        </div>
+      )}
 
-        <button type="submit" className="border p-2 rounded hover:bg-gray-100">
-          Add Guest
-        </button>
-      </form>
-
-      {message && <p className="mt-4">{message}</p>}
-    </main>
+    </PageLayout>
   );
 }

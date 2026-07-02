@@ -1,27 +1,43 @@
-import Link from 'next/link';
+import PageHeading from '@/components/atoms/PageHeading';
+import NavigationCard from '@/components/molecules/NavigationCard';
+import PageLayout from '@/components/organisms/PageLayout';
 
 export default function LandingPage() {
   return (
-    <main className="min-h-screen p-8">
-      <h1 className="text-3xl font-bold mb-6">Guest List Manager</h1>
+    <PageLayout showHomeButton={false}>
 
-      <div className="grid gap-4 max-w-md">
-        <Link href="/view" className="border rounded-lg p-4 hover:bg-gray-100">
-          View Guests
-        </Link>
+      <PageHeading>
+        Guest List Manager
+      </PageHeading>
 
-        <Link href="/add" className="border rounded-lg p-4 hover:bg-gray-100">
-          Add Guest
-        </Link>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
 
-        <Link href="/edit" className="border rounded-lg p-4 hover:bg-gray-100">
-          Edit Guest
-        </Link>
+        <NavigationCard
+          title="View Guests"
+          description="View all guests currently stored in the database."
+          href="/view"
+        />
 
-        <Link href="/delete" className="border rounded-lg p-4 hover:bg-gray-100">
-          Delete Guest
-        </Link>
+        <NavigationCard
+          title="Add Guest"
+          description="Register a new guest."
+          href="/add"
+        />
+
+        <NavigationCard
+          title="Edit Guest"
+          description="Update an existing guest."
+          href="/edit"
+        />
+
+        <NavigationCard
+          title="Delete Guest"
+          description="Remove a guest from the database."
+          href="/delete"
+        />
+
       </div>
-    </main>
+
+    </PageLayout>
   );
 }
