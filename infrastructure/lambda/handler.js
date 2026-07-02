@@ -1,150 +1,34 @@
-const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const { DynamoDBDocumentClient, PutCommand, ScanCommand, DeleteCommand, UpdateCommand} = require('@aws-sdk/lib-dynamodb');
+const {
+  getGuests,
+  createGuest,
+  updateGuest,
+  deleteGuest,
+} = require('./controllers');
 
-const client = new DynamoDBClient({});
-const db = DynamoDBDocumentClient.from(client);
-
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Content-Type',
-  'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
-};
+const { emptyResponse, jsonResponse } = require('./utils/response');
 
 exports.main = async function (event) {
-  const tableName = process.env.TABLE_NAME;
-
   if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 200,
-      headers,
-      body: '',
-    };
+    return emptyResponse();
   }
 
   if (event.httpMethod === 'GET') {
-    const result = await db.send(
-      new ScanCommand({
-        TableName: tableName,
-      })
-    );
-
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify({
-        guests: result.Items || [],
-      }),
-    };
+    return getGuests(event);
   }
 
   if (event.httpMethod === 'POST') {
-    const body = JSON.parse(event.body || '{}');
-
-    const guest = {
-      email: body.email,
-      firstName: body.firstName,
-      lastName: body.lastName,
-    };
-
-    await db.send(
-      new PutCommand({
-        TableName: tableName,
-        Item: guest,
-      })
-    );
-
-    return {
-      statusCode: 201,
-      headers,
-      body: JSON.stringify({
-        message: 'Guest added successfully',
-        guest,
-      }),
-    };
+    return createGuest(event);
   }
-
-if (event.httpMethod === 'DELETE') {
-
-  const body = JSON.parse(event.body || '{}');
-
-  const { email } = body;
-
-  if (!email) {
-    return {
-      statusCode: 400,
-      headers,
-      body: JSON.stringify({
-        message: 'Email is required',
-      }),
-    };
-  }
-
-  await db.send(
-    new DeleteCommand({
-      TableName: tableName,
-      Key: {
-        email,
-      },
-    })
-  );
-
-  return {
-    statusCode: 200,
-    headers,
-    body: JSON.stringify({
-      message: 'Guest deleted successfully',
-      email,
-    }),
-  };
-}
 
   if (event.httpMethod === 'PUT') {
-    const body = JSON.parse(event.body || '{}');
-
-    const { email, firstName, lastName } = body;
-
-    if (!email) {
-      return {
-        statusCode: 400,
-        headers,
-        body: JSON.stringify({
-          message: 'Email is required',
-        }),
-      };
-    }
-    await db.send(
-      new UpdateCommand({
-        TableName: tableName,
-        Key: {
-          email,
-        },
-        UpdateExpression: 'SET firstName = :firstName, lastName = :lastName',
-        ExpressionAttributeValues: {
-          ':firstName': firstName,
-          ':lastName': lastName,
-        },
-      })
-    );
-
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify({
-        message: 'Guest updated successfully',
-        guest: {
-          email,
-          firstName,
-          lastName,
-        },
-      }),
-    };
+    return updateGuest(event);
   }
 
-  return {
-    statusCode: 405,
-    headers,
-    body: JSON.stringify({
-      message: 'Method not allowed',
-    }),
-  };
+  if (event.httpMethod === 'DELETE') {
+    return deleteGuest(event);
+  }
+
+  return jsonResponse(405, {
+    message: 'Method not allowed',
+  });
 };
