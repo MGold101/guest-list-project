@@ -1,5 +1,5 @@
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const { DynamoDBDocumentClient, PutCommand, ScanCommand, DeleteCommand} = require('@aws-sdk/lib-dynamodb');
+const { DynamoDBDocumentClient, PutCommand, ScanCommand, DeleteCommand, UpdateCommand} = require('@aws-sdk/lib-dynamodb');
 
 const client = new DynamoDBClient({});
 const db = DynamoDBDocumentClient.from(client);
@@ -90,6 +90,48 @@ exports.main = async function (event) {
       headers,
       body: JSON.stringify({
         message: 'Guest deleted successfully',
+      }),
+    };
+  }
+
+  if (event.httpMethod === 'PUT') {
+    const body = JSON.parse(event.body || '{}');
+
+    const { email, firstName, lastName } = body;
+
+    if (!email) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({
+          message: 'Email is required',
+        }),
+      };
+    }
+    await db.send(
+      new UpdateCommand({
+        TableName: tableName,
+        Key: {
+          email,
+        },
+        UpdateExpression: 'SET firstName = :firstName, lastName = :lastName',
+        ExpressionAttributeValues: {
+          ':firstName': firstName,
+          ':lastName': lastName,
+        },
+      })
+    );
+
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({
+        message: 'Guest updated successfully',
+        guest: {
+          email,
+          firstName,
+          lastName,
+        },
       }),
     };
   }
