@@ -7,7 +7,7 @@ const db = DynamoDBDocumentClient.from(client);
 
 exports.deleteGuest = async function (event) {
   const body = JSON.parse(event.body || '{}');
-  const { email } = body;
+  const email = body.email?.trim();
 
   if (!email) {
     return jsonResponse(400, {

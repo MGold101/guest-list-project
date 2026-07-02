@@ -1,5 +1,5 @@
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const { DynamoDBDocumentClient, PutCommand } = require('@aws-sdk/lib-dynamodb');
+const { DynamoDBDocumentClient, PutCommand, GetCommand } = require('@aws-sdk/lib-dynamodb');
 const { jsonResponse } = require('../utils/response');
 
 const client = new DynamoDBClient({});
@@ -9,10 +9,31 @@ exports.createGuest = async function (event) {
   const body = JSON.parse(event.body || '{}');
 
   const guest = {
-    email: body.email,
-    firstName: body.firstName,
-    lastName: body.lastName,
+    email: body.email?.trim(),
+    firstName: body.firstName?.trim(),
+    lastName: body.lastName?.trim(),
   };
+
+  if (!guest.email || !guest.firstName || !guest.lastName) {
+    return jsonResponse(400, {
+      message: 'First name, last name and email are required',
+    });
+  }
+
+  const existingGuest = await db.send(
+    new GetCommand({
+      TableName: process.env.TABLE_NAME,
+      Key: {
+        email: guest.email,
+      },
+    })
+  );
+
+  if (existingGuest.Item) {
+    return jsonResponse(409, {
+      message: 'A guest with this email already exists',
+    });
+  }
 
   await db.send(
     new PutCommand({

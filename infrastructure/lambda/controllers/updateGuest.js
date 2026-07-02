@@ -9,14 +9,14 @@ exports.updateGuest = async function (event) {
   const body = JSON.parse(event.body || '{}');
 
   const guest = {
-    email: body.email,
-    firstName: body.firstName,
-    lastName: body.lastName,
+    email: body.email?.trim(),
+    firstName: body.firstName?.trim(),
+    lastName: body.lastName?.trim(),
   };
 
-  if (!guest.email) {
+  if (!guest.email || !guest.firstName || !guest.lastName) {
     return jsonResponse(400, {
-      message: 'Email is required',
+      message: 'First name, last name and email are required',
     });
   }
 

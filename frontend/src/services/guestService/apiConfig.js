@@ -1,1 +1,1 @@
-export const API_URL = 'https://vsdqezf300.execute-api.eu-west-2.amazonaws.com/prod';
+export const API_URL = process.env.NEXT_PUBLIC_API_URL;
