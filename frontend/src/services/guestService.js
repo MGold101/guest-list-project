@@ -28,12 +28,34 @@ export async function createGuest(guest) {
 }
 
 export async function deleteGuest(email) {
-  const response = await fetch(`${API_URL}?email=${encodeURIComponent(email)}`, {
+  const response = await fetch(API_URL, {
     method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      email,
+    }),
   });
 
   if (!response.ok) {
     throw new Error('Failed to delete guest');
+  }
+
+  return response.json();
+}
+
+export async function updateGuest(guest) {
+  const response = await fetch(API_URL, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(guest),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to update guest');
   }
 
   return response.json();

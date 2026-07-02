@@ -63,36 +63,40 @@ exports.main = async function (event) {
     };
   }
 
-  if (event.httpMethod === 'DELETE') {
-    const email = event.queryStringParameters?.email;
+if (event.httpMethod === 'DELETE') {
 
-    if (!email) {
-      return {
-        statusCode: 400,
-        headers,
-        body: JSON.stringify({
-          message: 'Email is required',
-        }),
-      };
-    }
+  const body = JSON.parse(event.body || '{}');
 
-    await db.send(
-      new DeleteCommand({
-        TableName: tableName,
-        Key: {
-          email,
-        },
-      })
-    );
+  const { email } = body;
 
+  if (!email) {
     return {
-      statusCode: 200,
+      statusCode: 400,
       headers,
       body: JSON.stringify({
-        message: 'Guest deleted successfully',
+        message: 'Email is required',
       }),
     };
   }
+
+  await db.send(
+    new DeleteCommand({
+      TableName: tableName,
+      Key: {
+        email,
+      },
+    })
+  );
+
+  return {
+    statusCode: 200,
+    headers,
+    body: JSON.stringify({
+      message: 'Guest deleted successfully',
+      email,
+    }),
+  };
+}
 
   if (event.httpMethod === 'PUT') {
     const body = JSON.parse(event.body || '{}');

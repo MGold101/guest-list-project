@@ -6,6 +6,7 @@ export default function GuestForm({
   formData,
   onChange,
   onSubmit,
+  submitLabel = 'Add Guest',
 }) {
   return (
     <form onSubmit={onSubmit} className="grid gap-4 max-w-md">
@@ -42,7 +43,7 @@ export default function GuestForm({
       </div>
 
       <Button type="submit">
-        Add Guest
+        {submitLabel}
       </Button>
 
     </form>

@@ -1,3 +1,5 @@
-export default function EditPage() {
-  return <h1>Edit Guest</h1>;
+import EditGuestPage from '@/components/organisms/EditGuestPage';
+
+export default function Page() {
+  return <EditGuestPage />;
 }
