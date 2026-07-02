@@ -1,3 +1,5 @@
-export default function DeletePage() {
-  return <h1>Delete Guest</h1>;
+import DeleteGuestPage from '@/components/organisms/DeleteGuestPage';
+
+export default function Page() {
+  return <DeleteGuestPage />;
 }

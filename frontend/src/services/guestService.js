@@ -26,3 +26,15 @@ export async function createGuest(guest) {
 
   return response.json();
 }
+
+export async function deleteGuest(email) {
+  const response = await fetch(`${API_URL}?email=${encodeURIComponent(email)}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to delete guest');
+  }
+
+  return response.json();
+}
