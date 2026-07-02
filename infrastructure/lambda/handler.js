@@ -1,5 +1,5 @@
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const { DynamoDBDocumentClient, PutCommand, ScanCommand} = require('@aws-sdk/lib-dynamodb');
+const { DynamoDBDocumentClient, PutCommand, ScanCommand, DeleteCommand} = require('@aws-sdk/lib-dynamodb');
 
 const client = new DynamoDBClient({});
 const db = DynamoDBDocumentClient.from(client);
@@ -59,6 +59,37 @@ exports.main = async function (event) {
       body: JSON.stringify({
         message: 'Guest added successfully',
         guest,
+      }),
+    };
+  }
+
+  if (event.httpMethod === 'DELETE') {
+    const email = event.queryStringParameters?.email;
+
+    if (!email) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({
+          message: 'Email is required',
+        }),
+      };
+    }
+
+    await db.send(
+      new DeleteCommand({
+        TableName: tableName,
+        Key: {
+          email,
+        },
+      })
+    );
+
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({
+        message: 'Guest deleted successfully',
       }),
     };
   }
