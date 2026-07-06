@@ -9,7 +9,6 @@ import GuestForm from '@/components/molecules/GuestForm';
 import PageLayout from '@/components/organisms/PageLayout';
 
 import validateGuest from '@/utils/validateGuest';
-
 import { updateGuest } from '@/services/guestService';
 
 export default function EditGuestPage() {
@@ -20,6 +19,7 @@ export default function EditGuestPage() {
   });
 
   const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -39,7 +39,9 @@ export default function EditGuestPage() {
       setMessage(validationMessage);
       return;
     }
-    
+
+    setIsLoading(true);
+
     try {
       await updateGuest(formData);
 
@@ -52,6 +54,8 @@ export default function EditGuestPage() {
       });
     } catch {
       setMessage('Failed to update guest.');
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -64,6 +68,8 @@ export default function EditGuestPage() {
         onChange={handleChange}
         onSubmit={handleSubmit}
         submitLabel="Update Guest"
+        isLoading={isLoading}
+        loadingLabel="Updating..."
       />
 
       {message && (

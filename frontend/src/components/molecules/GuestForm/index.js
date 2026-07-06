@@ -7,6 +7,8 @@ export default function GuestForm({
   onChange,
   onSubmit,
   submitLabel = 'Add Guest',
+  isLoading = false,
+  loadingLabel = 'Saving...',
 }) {
   return (
     <form onSubmit={onSubmit} className="grid gap-4 max-w-md">
@@ -42,8 +44,8 @@ export default function GuestForm({
         />
       </div>
 
-      <Button type="submit">
-        {submitLabel}
+      <Button type="submit" disabled={isLoading}>
+        {isLoading ? loadingLabel : submitLabel}
       </Button>
 
     </form>

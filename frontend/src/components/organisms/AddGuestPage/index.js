@@ -8,11 +8,9 @@ import GuestForm from '@/components/molecules/GuestForm';
 import PageLayout from '@/components/organisms/PageLayout';
 
 import validateGuest from '@/utils/validateGuest';
-
 import { createGuest } from '@/services/guestService';
 
 export default function AddGuestPage() {
-
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -20,16 +18,15 @@ export default function AddGuestPage() {
   });
 
   const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   function handleChange(event) {
-
     const { name, value } = event.target;
 
     setFormData((currentData) => ({
       ...currentData,
       [name]: value,
     }));
-
   }
 
   async function handleSubmit(event) {
@@ -42,8 +39,9 @@ export default function AddGuestPage() {
       return;
     }
 
-    try {
+    setIsLoading(true);
 
+    try {
       await createGuest(formData);
 
       setMessage('Guest added successfully.');
@@ -53,26 +51,24 @@ export default function AddGuestPage() {
         lastName: '',
         email: '',
       });
-
     } catch {
-
       setMessage('Failed to add guest.');
-
+    } finally {
+      setIsLoading(false);
     }
-
   }
 
   return (
     <PageLayout>
-
-      <PageHeading>
-        Add Guest
-      </PageHeading>
+      <PageHeading>Add Guest</PageHeading>
 
       <GuestForm
         formData={formData}
         onChange={handleChange}
         onSubmit={handleSubmit}
+        submitLabel="Add Guest"
+        isLoading={isLoading}
+        loadingLabel="Adding..."
       />
 
       {message && (
@@ -80,7 +76,6 @@ export default function AddGuestPage() {
           <BodyText>{message}</BodyText>
         </div>
       )}
-
     </PageLayout>
   );
 }

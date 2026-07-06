@@ -15,9 +15,17 @@ import { deleteGuest } from '@/services/guestService';
 export default function DeleteGuestPage() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   async function handleSubmit(event) {
     event.preventDefault();
+
+    if (!email.trim()) {
+      setMessage('Email is required.');
+      return;
+    }
+
+    setIsLoading(true);
 
     try {
       await deleteGuest(email);
@@ -25,6 +33,8 @@ export default function DeleteGuestPage() {
       setEmail('');
     } catch {
       setMessage('Failed to delete guest.');
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -45,7 +55,9 @@ export default function DeleteGuestPage() {
           />
         </div>
 
-        <Button type="submit">Delete Guest</Button>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? 'Deleting...' : 'Delete Guest'}
+        </Button>
       </form>
 
       {message && (
