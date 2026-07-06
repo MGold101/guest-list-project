@@ -7,6 +7,8 @@ import BodyText from '@/components/atoms/BodyText';
 import GuestForm from '@/components/molecules/GuestForm';
 import PageLayout from '@/components/organisms/PageLayout';
 
+import validateGuest from '@/utils/validateGuest';
+
 import { createGuest } from '@/services/guestService';
 
 export default function AddGuestPage() {
@@ -31,8 +33,14 @@ export default function AddGuestPage() {
   }
 
   async function handleSubmit(event) {
-
     event.preventDefault();
+
+    const validationMessage = validateGuest(formData);
+
+    if (validationMessage) {
+      setMessage(validationMessage);
+      return;
+    }
 
     try {
 

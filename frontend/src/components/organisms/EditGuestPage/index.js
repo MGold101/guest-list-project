@@ -8,6 +8,8 @@ import BodyText from '@/components/atoms/BodyText';
 import GuestForm from '@/components/molecules/GuestForm';
 import PageLayout from '@/components/organisms/PageLayout';
 
+import validateGuest from '@/utils/validateGuest';
+
 import { updateGuest } from '@/services/guestService';
 
 export default function EditGuestPage() {
@@ -31,6 +33,13 @@ export default function EditGuestPage() {
   async function handleSubmit(event) {
     event.preventDefault();
 
+    const validationMessage = validateGuest(formData);
+
+    if (validationMessage) {
+      setMessage(validationMessage);
+      return;
+    }
+    
     try {
       await updateGuest(formData);
 
