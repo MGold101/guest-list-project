@@ -2,3 +2,4 @@ export { getGuests } from './getGuests';
 export { createGuest } from './createGuest';
 export { updateGuest } from './updateGuest';
 export { deleteGuest } from './deleteGuest';
+export { getGuestByEmail } from './getGuestByEmail';

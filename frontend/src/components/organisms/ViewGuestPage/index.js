@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
+import Button from '@/components/atoms/Button';
 import PageHeading from '@/components/atoms/PageHeading';
 import GuestTable from '@/components/molecules/GuestTable';
 import PageLayout from '@/components/organisms/PageLayout';
@@ -25,13 +26,17 @@ export default function ViewGuestsPage() {
 
   return (
     <PageLayout>
+      <div className="mb-6 flex items-center justify-between">
+        <PageHeading>
+          Guest List
+        </PageHeading>
 
-      <PageHeading>
-        View Guests
-      </PageHeading>
+        <Button href="/add">
+          Add Guest
+        </Button>
+      </div>
 
       <GuestTable guests={guests} />
-
     </PageLayout>
   );
 }

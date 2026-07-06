@@ -1,22 +1,16 @@
-import Button from '@/components/atoms/Button';
+import Navbar from '@/components/organisms/Navbar';
 
 export default function PageLayout({
   children,
-  showHomeButton = true,
+  showNavbar = true,
 }) {
   return (
     <main className="min-h-screen flex justify-center p-8">
       <div className="w-full max-w-5xl">
 
-        {children}
+        {showNavbar && <Navbar />}
 
-        {showHomeButton && (
-          <div className="mt-8">
-            <Button href="/">
-              Return Home
-            </Button>
-          </div>
-        )}
+        {children}
 
       </div>
     </main>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import PageHeading from '@/components/atoms/PageHeading';
 import BodyText from '@/components/atoms/BodyText';
@@ -9,9 +9,9 @@ import GuestForm from '@/components/molecules/GuestForm';
 import PageLayout from '@/components/organisms/PageLayout';
 
 import validateGuest from '@/utils/validateGuest';
-import { updateGuest } from '@/services/guestService';
+import { getGuestByEmail, updateGuest } from '@/services/guestService';
 
-export default function EditGuestPage() {
+export default function EditGuestPage({ email }) {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -20,6 +20,26 @@ export default function EditGuestPage() {
 
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    async function loadGuest() {
+      if (!email) {
+        return;
+      }
+
+      const guest = await getGuestByEmail(email);
+
+      if (guest) {
+        setFormData({
+          firstName: guest.firstName,
+          lastName: guest.lastName,
+          email: guest.email,
+        });
+      }
+    }
+
+    loadGuest();
+  }, [email]);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -46,12 +66,6 @@ export default function EditGuestPage() {
       await updateGuest(formData);
 
       setMessage('Guest updated successfully.');
-
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-      });
     } catch {
       setMessage('Failed to update guest.');
     } finally {

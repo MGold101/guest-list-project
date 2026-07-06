@@ -1,43 +1,34 @@
 import PageHeading from '@/components/atoms/PageHeading';
-import NavigationCard from '@/components/molecules/NavigationCard';
+import BodyText from '@/components/atoms/BodyText';
+import Button from '@/components/atoms/Button';
+
 import PageLayout from '@/components/organisms/PageLayout';
 
 export default function LandingPage() {
   return (
-    <PageLayout showHomeButton={false}>
+    <PageLayout
+      showNavbar={false}
+    >
+      <div className="mx-auto flex min-h-[60vh] max-w-2xl flex-col items-center justify-center text-center">
 
-      <PageHeading>
-        Guest List Manager
-      </PageHeading>
+        <PageHeading>
+          Guest List Manager
+        </PageHeading>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+        <div className="mt-4">
+          <BodyText>
+            Welcome to the Guest List Manager. Use this application to view,
+            add, edit and manage your guests.
+          </BodyText>
+        </div>
 
-        <NavigationCard
-          title="View Guests"
-          description="View all guests currently stored in the database."
-          href="/view"
-        />
-
-        <NavigationCard
-          title="Add Guest"
-          description="Register a new guest."
-          href="/add"
-        />
-
-        <NavigationCard
-          title="Edit Guest"
-          description="Update an existing guest."
-          href="/edit"
-        />
-
-        <NavigationCard
-          title="Delete Guest"
-          description="Remove a guest from the database."
-          href="/delete"
-        />
+        <div className="mt-10">
+          <Button href="/view">
+            Enter
+          </Button>
+        </div>
 
       </div>
-
     </PageLayout>
   );
 }

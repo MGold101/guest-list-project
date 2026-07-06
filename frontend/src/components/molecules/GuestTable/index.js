@@ -1,8 +1,9 @@
 import BodyText from '@/components/atoms/BodyText';
+import SecondaryButton from '@/components/atoms/SecondaryButton';
 
 export default function GuestTable({ guests }) {
   return (
-    <table className="w-full border-collapse border border-border bg-surface rounded-lg overflow-hidden">
+    <table className="w-full overflow-hidden rounded-lg border border-border border-collapse bg-surface">
 
       <thead>
         <tr>
@@ -16,6 +17,10 @@ export default function GuestTable({ guests }) {
 
           <th className="border border-border p-3 text-left">
             <BodyText>Email</BodyText>
+          </th>
+
+          <th className="border border-border p-3 text-left">
+            <BodyText>Actions</BodyText>
           </th>
         </tr>
       </thead>
@@ -36,6 +41,22 @@ export default function GuestTable({ guests }) {
 
             <td className="border border-border p-3">
               <BodyText>{guest.email}</BodyText>
+            </td>
+
+            <td className="border border-border p-3">
+              <div className="flex gap-2">
+                <SecondaryButton href={`/guest/${encodeURIComponent(guest.email)}`}>
+                  View
+                </SecondaryButton>
+
+                <SecondaryButton href={`/guest/${encodeURIComponent(guest.email)}/edit`}>
+                  Edit
+                </SecondaryButton>
+
+                <SecondaryButton href={`/guest/${encodeURIComponent(guest.email)}/delete`}>
+                  Delete
+                </SecondaryButton>
+              </div>
             </td>
 
           </tr>
