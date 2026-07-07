@@ -1,11 +1,17 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
+
 import BodyText from '@/components/atoms/BodyText';
-import SecondaryButton from '@/components/atoms/SecondaryButton';
+import GuestTableRow from '@/components/molecules/GuestTableRow';
 
 export default function GuestTable({ guests }) {
+  const router = useRouter();
+
   return (
     <div className="overflow-hidden rounded-xl border border-border bg-surface">
-      <table className="w-full border-collapse">
-        <thead className="bg-surface-muted">
+      <table className="w-full">
+        <thead className="hidden bg-surface-muted md:table-header-group">
           <tr>
             <th className="px-5 py-4 text-left">
               <BodyText>First Name</BodyText>
@@ -25,40 +31,15 @@ export default function GuestTable({ guests }) {
           </tr>
         </thead>
 
-        <tbody>
+        <tbody className="block md:table-row-group">
           {guests.map((guest) => (
-            <tr
+            <GuestTableRow
               key={guest.email}
-              className="border-t border-border transition hover:bg-accent-soft"
-            >
-              <td className="px-5 py-4">
-                <BodyText>{guest.firstName}</BodyText>
-              </td>
-
-              <td className="px-5 py-4">
-                <BodyText>{guest.lastName}</BodyText>
-              </td>
-
-              <td className="px-5 py-4">
-                <BodyText>{guest.email}</BodyText>
-              </td>
-
-              <td className="px-5 py-4">
-                <div className="flex justify-end gap-2">
-                  <SecondaryButton href={`/guest/${encodeURIComponent(guest.email)}`}>
-                    View
-                  </SecondaryButton>
-
-                  <SecondaryButton href={`/guest/${encodeURIComponent(guest.email)}/edit`}>
-                    Edit
-                  </SecondaryButton>
-
-                  <SecondaryButton href={`/guest/${encodeURIComponent(guest.email)}/delete`}>
-                    Delete
-                  </SecondaryButton>
-                </div>
-              </td>
-            </tr>
+              guest={guest}
+              onClick={() =>
+                router.push(`/guest/${encodeURIComponent(guest.email)}`)
+              }
+            />
           ))}
         </tbody>
       </table>
