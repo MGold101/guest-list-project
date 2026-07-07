@@ -9,14 +9,15 @@ exports.updateGuest = async function (event) {
   const body = JSON.parse(event.body || '{}');
 
   const guest = {
+    id: body.id?.trim(),
     email: body.email?.trim(),
     firstName: body.firstName?.trim(),
     lastName: body.lastName?.trim(),
   };
 
-  if (!guest.email || !guest.firstName || !guest.lastName) {
+  if (!guest.id || !guest.email || !guest.firstName || !guest.lastName) {
     return jsonResponse(400, {
-      message: 'First name, last name and email are required',
+      message: 'ID, first name, last name and email are required',
     });
   }
 
@@ -24,12 +25,13 @@ exports.updateGuest = async function (event) {
     new UpdateCommand({
       TableName: process.env.TABLE_NAME,
       Key: {
-        email: guest.email,
+        id: guest.id,
       },
-      UpdateExpression: 'set firstName = :firstName, lastName = :lastName',
+      UpdateExpression: 'set firstName = :firstName, lastName = :lastName, email = :email',
       ExpressionAttributeValues: {
         ':firstName': guest.firstName,
         ':lastName': guest.lastName,
+        ':email': guest.email,
       },
     })
   );

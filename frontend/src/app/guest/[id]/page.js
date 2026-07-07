@@ -1,7 +1,7 @@
 import GuestDetailsPage from '@/components/organisms/GuestDetailsPage';
 
 export default async function Page({ params }) {
-  const { email } = await params;
+  const { id } = await params;
 
-  return <GuestDetailsPage email={email} />;
+  return <GuestDetailsPage id={id} />;
 }

@@ -1,10 +1,10 @@
 import { API_URL } from './apiConfig';
 
-export async function deleteGuest(email) {
+export async function deleteGuest(id) {
   const response = await fetch(API_URL, {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email }),
+    body: JSON.stringify({ id }),
   });
 
   if (!response.ok) {

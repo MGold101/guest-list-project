@@ -7,11 +7,11 @@ const db = DynamoDBDocumentClient.from(client);
 
 exports.deleteGuest = async function (event) {
   const body = JSON.parse(event.body || '{}');
-  const email = body.email?.trim();
+  const id = body.id?.trim();
 
-  if (!email) {
+  if (!id) {
     return jsonResponse(400, {
-      message: 'Email is required',
+      message: 'Guest ID is required',
     });
   }
 
@@ -19,13 +19,13 @@ exports.deleteGuest = async function (event) {
     new DeleteCommand({
       TableName: process.env.TABLE_NAME,
       Key: {
-        email,
+        id,
       },
     })
   );
 
   return jsonResponse(200, {
     message: 'Guest deleted successfully',
-    email,
+    id,
   });
 };

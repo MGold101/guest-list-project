@@ -6,19 +6,19 @@ import PageHeading from '@/components/atoms/PageHeading';
 import GuestDetailsCard from '@/components/molecules/GuestDetailsCard';
 import PageLayout from '@/components/organisms/PageLayout';
 
-import { getGuestByEmail } from '@/services/guestService';
+import { getGuestById } from '@/services/guestService';
 
-export default function GuestDetailsPage({ email }) {
+export default function GuestDetailsPage({ id }) {
   const [guest, setGuest] = useState(null);
 
   useEffect(() => {
     async function loadGuest() {
-      const data = await getGuestByEmail(email);
+      const data = await getGuestById(id);
       setGuest(data);
     }
 
     loadGuest();
-  }, [email]);
+  }, [id]);
 
   if (!guest) {
     return (

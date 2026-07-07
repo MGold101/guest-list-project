@@ -9,36 +9,36 @@ import SecondaryButton from '@/components/atoms/SecondaryButton';
 import DeleteConfirmationCard from '@/components/molecules/DeleteConfirmationCard';
 import PageLayout from '@/components/organisms/PageLayout';
 
-import { deleteGuest, getGuestByEmail } from '@/services/guestService';
+import { deleteGuest, getGuestById } from '@/services/guestService';
 
-export default function DeleteGuestPage({ email }) {
+export default function DeleteGuestPage({ id }) {
   const [guest, setGuest] = useState(null);
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async function loadGuest() {
-      if (!email) {
+      if (!id) {
         return;
       }
 
-      const data = await getGuestByEmail(email);
+      const data = await getGuestById(id);
       setGuest(data);
     }
 
     loadGuest();
-  }, [email]);
+  }, [id]);
 
   async function handleDelete() {
-    if (!guest?.email) {
-      setMessage({ type: 'error', text: 'Guest email is required.' });
+    if (!guest?.id) {
+      setMessage({ type: 'error', text: 'Guest ID is required.' });
       return;
     }
 
     setIsLoading(true);
 
     try {
-      await deleteGuest(guest.email);
+      await deleteGuest(guest.id);
       setMessage({ type: 'success', text: 'Guest deleted successfully.' });
       setGuest(null);
     } catch {

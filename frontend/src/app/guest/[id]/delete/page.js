@@ -1,7 +1,7 @@
 import DeleteGuestPage from '@/components/organisms/DeleteGuestPage';
 
 export default async function Page({ params }) {
-  const { email } = await params;
+  const { id } = await params;
 
-  return <DeleteGuestPage email={email} />;
+  return <DeleteGuestPage id={id} />;
 }

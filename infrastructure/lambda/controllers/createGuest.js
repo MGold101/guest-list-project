@@ -1,6 +1,7 @@
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const { DynamoDBDocumentClient, PutCommand, GetCommand } = require('@aws-sdk/lib-dynamodb');
+const { DynamoDBDocumentClient, PutCommand, ScanCommand } = require('@aws-sdk/lib-dynamodb');
 const { jsonResponse } = require('../utils/response');
+const { randomUUID } = require('crypto');
 
 const client = new DynamoDBClient({});
 const db = DynamoDBDocumentClient.from(client);
@@ -9,6 +10,7 @@ exports.createGuest = async function (event) {
   const body = JSON.parse(event.body || '{}');
 
   const guest = {
+    id: randomUUID(),
     email: body.email?.trim(),
     firstName: body.firstName?.trim(),
     lastName: body.lastName?.trim(),
@@ -21,15 +23,16 @@ exports.createGuest = async function (event) {
   }
 
   const existingGuest = await db.send(
-    new GetCommand({
+    new ScanCommand({
       TableName: process.env.TABLE_NAME,
-      Key: {
-        email: guest.email,
+      FilterExpression: 'email = :email',
+      ExpressionAttributeValues: {
+        ':email': guest.email,
       },
     })
   );
 
-  if (existingGuest.Item) {
+  if (existingGuest.Items?.length > 0) {
     return jsonResponse(409, {
       message: 'A guest with this email already exists',
     });

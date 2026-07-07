@@ -9,10 +9,11 @@ import GuestForm from '@/components/molecules/GuestForm';
 import PageLayout from '@/components/organisms/PageLayout';
 
 import validateGuest from '@/utils/validateGuest';
-import { getGuestByEmail, updateGuest } from '@/services/guestService';
+import { getGuestById, updateGuest } from '@/services/guestService';
 
-export default function EditGuestPage({ email }) {
+export default function EditGuestId({ id }) {
   const [formData, setFormData] = useState({
+    id: '',
     firstName: '',
     lastName: '',
     email: '',
@@ -23,14 +24,15 @@ export default function EditGuestPage({ email }) {
 
   useEffect(() => {
     async function loadGuest() {
-      if (!email) {
+      if (!id) {
         return;
       }
 
-      const guest = await getGuestByEmail(email);
+      const guest = await getGuestById(id);
 
       if (guest) {
         setFormData({
+          id: guest.id,
           firstName: guest.firstName,
           lastName: guest.lastName,
           email: guest.email,
@@ -39,7 +41,7 @@ export default function EditGuestPage({ email }) {
     }
 
     loadGuest();
-  }, [email]);
+  }, [id]);
 
   function handleChange(event) {
     const { name, value } = event.target;

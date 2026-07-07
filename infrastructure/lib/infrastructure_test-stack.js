@@ -16,15 +16,15 @@ class InfrastructureTestStack extends cdk.Stack {
 
     const guestListTable = new dynamodb.Table(this, 'GuestList', {
       partitionKey: {
-        name: 'email',
-        type: dynamodb.AttributeType.STRING,  
+        name: 'id',
+        type: dynamodb.AttributeType.STRING,
       },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     })
 
     const guestListFunction = new lambda.Function(this, 'GuestListFunction', {
-      runtime: lambda.Runtime.NODEJS_20_X,
+      runtime: lambda.Runtime.NODEJS_24_X,
       handler: 'handler.main',
       code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
       environment: {

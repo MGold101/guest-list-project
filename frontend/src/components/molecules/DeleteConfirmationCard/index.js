@@ -21,15 +21,23 @@ export default function DeleteConfirmationCard({
         </BodyText>
 
         <div className="rounded-lg border border-border bg-surface-muted p-4">
-          <p className="text-sm text-muted">Guest</p>
+          <p className="text-sm text-muted">Guest ID</p>
 
-          <p className="mt-1 text-lg font-semibold text-foreground">
-            {guest.firstName} {guest.lastName}
+          <p className="mt-1 break-all text-sm font-semibold text-foreground">
+            {guest.id}
           </p>
 
-          <p className="mt-1 text-sm text-muted">
-            {guest.email}
-          </p>
+          <div className="mt-4">
+            <p className="text-sm text-muted">Guest</p>
+
+            <p className="mt-1 text-lg font-semibold text-foreground">
+              {guest.firstName} {guest.lastName}
+            </p>
+
+            <p className="mt-1 text-sm text-muted">
+              {guest.email}
+            </p>
+          </div>
         </div>
 
         <div className="flex gap-3">

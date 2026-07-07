@@ -1,4 +1,3 @@
-import BodyText from '@/components/atoms/BodyText';
 import SecondaryButton from '@/components/atoms/SecondaryButton';
 
 export default function GuestDetailsCard({ guest }) {
@@ -16,6 +15,20 @@ export default function GuestDetailsCard({ guest }) {
 
       <div className="grid gap-6 p-6 md:grid-cols-2">
         <div>
+          <p className="text-sm font-medium text-muted">ID</p>
+          <p className="mt-1 break-all text-lg font-semibold text-foreground">
+            {guest.id}
+          </p>
+        </div>
+
+        <div>
+          <p className="text-sm font-medium text-muted">Email</p>
+          <p className="mt-1 text-lg font-semibold text-foreground">
+            {guest.email}
+          </p>
+        </div>
+
+        <div>
           <p className="text-sm font-medium text-muted">First Name</p>
           <p className="mt-1 text-lg font-semibold text-foreground">
             {guest.firstName}
@@ -28,21 +41,14 @@ export default function GuestDetailsCard({ guest }) {
             {guest.lastName}
           </p>
         </div>
-
-        <div className="md:col-span-2">
-          <p className="text-sm font-medium text-muted">Email</p>
-          <p className="mt-1 text-lg font-semibold text-foreground">
-            {guest.email}
-          </p>
-        </div>
       </div>
 
       <div className="flex gap-3 border-t border-border bg-surface-muted px-6 py-4">
-        <SecondaryButton href={`/guest/${encodeURIComponent(guest.email)}/edit`}>
+        <SecondaryButton href={`/guest/${guest.id}/edit`}>
           Edit Guest
         </SecondaryButton>
 
-        <SecondaryButton href={`/guest/${encodeURIComponent(guest.email)}/delete`}>
+        <SecondaryButton href={`/guest/${guest.id}/delete`}>
           Delete Guest
         </SecondaryButton>
 
