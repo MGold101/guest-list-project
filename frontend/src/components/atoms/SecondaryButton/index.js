@@ -8,7 +8,7 @@ export default function SecondaryButton({
   disabled = false,
 }) {
   const className =
-    'rounded-md border border-border px-3 py-1.5 text-sm font-medium text-foreground hover:bg-background-secondary disabled:cursor-not-allowed disabled:opacity-50';
+    'inline-flex items-center justify-center rounded-lg border border-secondary bg-surface px-3.5 py-2 text-sm font-semibold text-secondary shadow-sm transition hover:bg-secondary hover:text-white disabled:cursor-not-allowed disabled:opacity-50';
 
   if (href) {
     return (

@@ -1,6 +1,7 @@
+import Button from '@/components/atoms/Button';
+import SecondaryButton from '@/components/atoms/SecondaryButton';
 import Input from '@/components/atoms/Input';
 import Label from '@/components/atoms/Label';
-import Button from '@/components/atoms/Button';
 
 export default function GuestForm({
   formData,
@@ -9,10 +10,10 @@ export default function GuestForm({
   submitLabel = 'Add Guest',
   isLoading = false,
   loadingLabel = 'Saving...',
+  showCancel = true,
 }) {
   return (
-    <form onSubmit={onSubmit} className="grid gap-4 max-w-md">
-
+    <form onSubmit={onSubmit} className="grid max-w-xl gap-5">
       <div>
         <Label htmlFor="firstName">First Name</Label>
         <Input
@@ -20,6 +21,7 @@ export default function GuestForm({
           name="firstName"
           value={formData.firstName}
           onChange={onChange}
+          placeholder="Enter first name"
         />
       </div>
 
@@ -30,6 +32,7 @@ export default function GuestForm({
           name="lastName"
           value={formData.lastName}
           onChange={onChange}
+          placeholder="Enter last name"
         />
       </div>
 
@@ -41,13 +44,21 @@ export default function GuestForm({
           type="email"
           value={formData.email}
           onChange={onChange}
+          placeholder="Enter email address"
         />
       </div>
 
-      <Button type="submit" disabled={isLoading}>
-        {isLoading ? loadingLabel : submitLabel}
-      </Button>
+      <div className="flex gap-3 pt-2">
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? loadingLabel : submitLabel}
+        </Button>
 
+        {showCancel && (
+          <SecondaryButton href="/view">
+            Cancel
+          </SecondaryButton>
+        )}
+      </div>
     </form>
   );
 }

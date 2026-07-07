@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import PageHeading from '@/components/atoms/PageHeading';
-import BodyText from '@/components/atoms/BodyText';
+import Alert from '@/components/atoms/Alert';
 import GuestForm from '@/components/molecules/GuestForm';
 import PageLayout from '@/components/organisms/PageLayout';
 
@@ -17,7 +17,7 @@ export default function AddGuestPage() {
     email: '',
   });
 
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   function handleChange(event) {
@@ -35,7 +35,7 @@ export default function AddGuestPage() {
     const validationMessage = validateGuest(formData);
 
     if (validationMessage) {
-      setMessage(validationMessage);
+      setMessage({ type: 'error', text: validationMessage });
       return;
     }
 
@@ -44,7 +44,7 @@ export default function AddGuestPage() {
     try {
       await createGuest(formData);
 
-      setMessage('Guest added successfully.');
+      setMessage({ type: 'success', text: 'Guest added successfully.' });
 
       setFormData({
         firstName: '',
@@ -52,7 +52,7 @@ export default function AddGuestPage() {
         email: '',
       });
     } catch {
-      setMessage('Failed to add guest.');
+      setMessage({ type: 'error', text: 'Failed to add guest.' });
     } finally {
       setIsLoading(false);
     }
@@ -73,7 +73,7 @@ export default function AddGuestPage() {
 
       {message && (
         <div className="mt-6">
-          <BodyText>{message}</BodyText>
+          <Alert type={message.type}>{message.text}</Alert>
         </div>
       )}
     </PageLayout>

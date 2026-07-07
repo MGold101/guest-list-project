@@ -5,13 +5,13 @@ export default function PageLayout({
   showNavbar = true,
 }) {
   return (
-    <main className="min-h-screen flex justify-center p-8">
-      <div className="w-full max-w-5xl">
-
+    <main className="min-h-screen bg-background px-6 py-8">
+      <div className="mx-auto w-full max-w-5xl">
         {showNavbar && <Navbar />}
 
-        {children}
-
+        <section className="rounded-2xl bg-surface p-8 shadow-md">
+          {children}
+        </section>
       </div>
     </main>
   );

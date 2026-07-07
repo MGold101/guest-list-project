@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import PageHeading from '@/components/atoms/PageHeading';
-import BodyText from '@/components/atoms/BodyText';
+import Alert from '@/components/atoms/Alert';
 
 import GuestForm from '@/components/molecules/GuestForm';
 import PageLayout from '@/components/organisms/PageLayout';
@@ -18,7 +18,7 @@ export default function EditGuestPage({ email }) {
     email: '',
   });
 
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -56,7 +56,7 @@ export default function EditGuestPage({ email }) {
     const validationMessage = validateGuest(formData);
 
     if (validationMessage) {
-      setMessage(validationMessage);
+      setMessage({ type: 'error', text: validationMessage });
       return;
     }
 
@@ -65,9 +65,9 @@ export default function EditGuestPage({ email }) {
     try {
       await updateGuest(formData);
 
-      setMessage('Guest updated successfully.');
+      setMessage({ type: 'success', text: 'Guest updated successfully.' });
     } catch {
-      setMessage('Failed to update guest.');
+      setMessage({ type: 'error', text: 'Failed to update guest.' });
     } finally {
       setIsLoading(false);
     }
@@ -88,7 +88,7 @@ export default function EditGuestPage({ email }) {
 
       {message && (
         <div className="mt-6">
-          <BodyText>{message}</BodyText>
+          <Alert type={message.type}>{message.text}</Alert>
         </div>
       )}
     </PageLayout>
