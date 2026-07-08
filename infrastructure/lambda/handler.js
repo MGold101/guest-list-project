@@ -3,11 +3,17 @@ const {
   createGuest,
   updateGuest,
   deleteGuest,
+  loginAdmin,
 } = require('./controllers');
 
 const { emptyResponse, jsonResponse } = require('./utils/response');
 
 exports.main = async function (event) {
+
+  if (event.path === '/admin/login' && event.httpMethod === 'POST') {
+  return loginAdmin(event);
+  }
+
   if (event.httpMethod === 'OPTIONS') {
     return emptyResponse();
   }

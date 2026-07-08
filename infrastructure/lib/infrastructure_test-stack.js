@@ -30,6 +30,8 @@ class InfrastructureTestStack extends cdk.Stack {
       environment: {
         TABLE_NAME: guestListTable.tableName,
         FRONTEND_URL: process.env.FRONTEND_URL,
+        ADMIN_USERNAME: process.env.ADMIN_USERNAME,
+        ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
       }
     })
 

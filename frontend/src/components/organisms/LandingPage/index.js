@@ -24,7 +24,7 @@ export default function LandingPage() {
         </div>
 
         <div className="mt-10">
-          <Button href="/admin/view">
+          <Button href="/admin/login">
             Enter Application
           </Button>
         </div>
