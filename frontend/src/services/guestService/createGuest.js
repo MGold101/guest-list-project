@@ -7,9 +7,11 @@ export async function createGuest(guest) {
     body: JSON.stringify(guest),
   });
 
+  const data = await response.json();
+
   if (!response.ok) {
-    throw new Error('Failed to create guest');
+    throw new Error(data.message || 'Failed to create guest');
   }
 
-  return response.json();
+  return data;
 }

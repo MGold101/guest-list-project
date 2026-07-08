@@ -54,8 +54,10 @@ exports.createGuest = async function (event) {
       });
     }
 
+    console.error(error);
+
     return jsonResponse(500, {
-      message: 'Failed to create guest',
+      message: 'An unexpected error occurred while creating the guest.',
     });
   }
 };

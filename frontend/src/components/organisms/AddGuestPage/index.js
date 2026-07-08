@@ -51,9 +51,12 @@ export default function AddGuestPage() {
         lastName: '',
         email: '',
       });
-    } catch {
-      setMessage({ type: 'error', text: 'Failed to add guest.' });
-    } finally {
+    } catch (error) {
+      setMessage({
+        type: 'error',
+        text: error.message,
+      });
+    }finally {
       setIsLoading(false);
     }
   }

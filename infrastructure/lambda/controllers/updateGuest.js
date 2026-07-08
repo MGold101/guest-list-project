@@ -40,8 +40,10 @@ exports.updateGuest = async function (event) {
       });
     }
 
+    console.error(error);
+
     return jsonResponse(500, {
-      message: 'Failed to update guest',
+      message: 'An unexpected error occurred while updating the guest.',
     });
   }
 };

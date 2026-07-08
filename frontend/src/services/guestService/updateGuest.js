@@ -7,9 +7,11 @@ export async function updateGuest(guest) {
     body: JSON.stringify(guest),
   });
 
+  const data = await response.json();
+
   if (!response.ok) {
-    throw new Error('Failed to update guest');
+    throw new Error(data.message || 'Failed to update guest');
   }
 
-  return response.json();
+  return data;
 }

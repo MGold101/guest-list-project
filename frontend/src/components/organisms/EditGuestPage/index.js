@@ -68,8 +68,11 @@ export default function EditGuestId({ id }) {
       await updateGuest(formData);
 
       setMessage({ type: 'success', text: 'Guest updated successfully.' });
-    } catch {
-      setMessage({ type: 'error', text: 'Failed to update guest.' });
+    } catch (error) {
+      setMessage({
+        type: 'error',
+        text: error.message,
+      });
     } finally {
       setIsLoading(false);
     }

@@ -34,8 +34,10 @@ exports.deleteGuest = async function (event) {
       });
     }
 
+    console.error(error);
+
     return jsonResponse(500, {
-      message: 'Failed to delete guest',
+      message: 'An unexpected error occurred while deleting the guest.',
     });
   }
 };

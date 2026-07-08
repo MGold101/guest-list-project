@@ -41,7 +41,7 @@ export default function GuestForm({
         <Input
           id="email"
           name="email"
-          type="email"
+          type="text"
           value={formData.email}
           onChange={onChange}
           placeholder="Enter email address"

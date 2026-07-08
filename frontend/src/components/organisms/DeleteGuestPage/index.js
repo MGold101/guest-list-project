@@ -41,8 +41,11 @@ export default function DeleteGuestPage({ id }) {
       await deleteGuest(guest.id);
       setMessage({ type: 'success', text: 'Guest deleted successfully.' });
       setGuest(null);
-    } catch {
-      setMessage({ type: 'error', text: 'Failed to delete guest.' });
+    } catch (error) {
+      setMessage({
+        type: 'error',
+        text: error.message,
+      });
     } finally {
       setIsLoading(false);
     }
