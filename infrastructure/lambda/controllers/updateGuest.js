@@ -1,43 +1,47 @@
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 const { DynamoDBDocumentClient, UpdateCommand } = require('@aws-sdk/lib-dynamodb');
+const { ZodError } = require('zod');
+
 const { jsonResponse } = require('../utils/response');
+const { guestWithIdSchema } = require('../validation/guestSchema');
 
 const client = new DynamoDBClient({});
 const db = DynamoDBDocumentClient.from(client);
 
 exports.updateGuest = async function (event) {
-  const body = JSON.parse(event.body || '{}');
+  try {
+    const body = JSON.parse(event.body || '{}');
 
-  const guest = {
-    id: body.id?.trim(),
-    email: body.email?.trim(),
-    firstName: body.firstName?.trim(),
-    lastName: body.lastName?.trim(),
-  };
+    const guest = guestWithIdSchema.parse(body);
 
-  if (!guest.id || !guest.email || !guest.firstName || !guest.lastName) {
-    return jsonResponse(400, {
-      message: 'ID, first name, last name and email are required',
+    await db.send(
+      new UpdateCommand({
+        TableName: process.env.TABLE_NAME,
+        Key: {
+          id: guest.id,
+        },
+        UpdateExpression: 'set firstName = :firstName, lastName = :lastName, email = :email',
+        ExpressionAttributeValues: {
+          ':firstName': guest.firstName,
+          ':lastName': guest.lastName,
+          ':email': guest.email,
+        },
+      })
+    );
+
+    return jsonResponse(200, {
+      message: 'Guest updated successfully',
+      guest,
+    });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return jsonResponse(400, {
+        message: error.issues[0].message,
+      });
+    }
+
+    return jsonResponse(500, {
+      message: 'Failed to update guest',
     });
   }
-
-  await db.send(
-    new UpdateCommand({
-      TableName: process.env.TABLE_NAME,
-      Key: {
-        id: guest.id,
-      },
-      UpdateExpression: 'set firstName = :firstName, lastName = :lastName, email = :email',
-      ExpressionAttributeValues: {
-        ':firstName': guest.firstName,
-        ':lastName': guest.lastName,
-        ':email': guest.email,
-      },
-    })
-  );
-
-  return jsonResponse(200, {
-    message: 'Guest updated successfully',
-    guest,
-  });
 };
