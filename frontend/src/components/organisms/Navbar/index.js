@@ -10,14 +10,14 @@ export default function Navbar() {
 
         <nav className="flex items-center gap-2">
           <Link
-            href="/view"
+            href="/admin/view"
             className="rounded-lg px-5 py-2.5 text-sm font-semibold text-navbar-muted transition hover:bg-white/10 hover:text-white"
           >
             Guest List
           </Link>
 
           <Link
-            href="/add"
+            href="/admin/add"
             className="rounded-lg px-5 py-2.5 text-sm font-semibold text-navbar-muted transition hover:bg-white/10 hover:text-white"
           >
             Add Guest

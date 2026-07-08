@@ -30,11 +30,11 @@ export default function GuestTableRow({ guest, onClick }) {
           className="flex justify-end gap-2"
           onClick={(event) => event.stopPropagation()}
         >
-          <SecondaryButton href={`/guest/${encodeURIComponent(guest.id)}/edit`}>
+          <SecondaryButton href={`/admin/guest/${encodeURIComponent(guest.id)}/edit`}>
             Edit
           </SecondaryButton>
 
-          <SecondaryButton href={`/guest/${encodeURIComponent(guest.id)}/delete`}>
+          <SecondaryButton href={`/admin/guest/${encodeURIComponent(guest.id)}/delete`}>
             Delete
           </SecondaryButton>
         </div>

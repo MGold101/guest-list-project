@@ -70,7 +70,7 @@ export default function DeleteGuestPage({ id }) {
           <Alert type={message.type}>{message.text}</Alert>
 
           {message.type === 'success' && (
-            <SecondaryButton href="/view">
+            <SecondaryButton href="/admin/view">
               Back to Guest List
             </SecondaryButton>
           )}

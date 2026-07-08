@@ -37,7 +37,7 @@ export default function GuestTable({ guests }) {
               key={guest.email}
               guest={guest}
               onClick={() =>
-                router.push(`/guest/${encodeURIComponent(guest.id)}`)
+                router.push(`/admin/guest/${encodeURIComponent(guest.id)}`)
               }
             />
           ))}

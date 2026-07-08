@@ -6,7 +6,7 @@ export default function GuestListHeader() {
     <div className="mb-6 flex items-center justify-between">
       <PageHeading>Guest List</PageHeading>
 
-      <Button href="/add">
+      <Button href="/admin/add">
         Add Guest
       </Button>
     </div>

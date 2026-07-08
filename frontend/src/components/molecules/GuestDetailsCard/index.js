@@ -44,15 +44,15 @@ export default function GuestDetailsCard({ guest }) {
       </div>
 
       <div className="flex gap-3 border-t border-border bg-surface-muted px-6 py-4">
-        <SecondaryButton href={`/guest/${guest.id}/edit`}>
+        <SecondaryButton href={`/admin/guest/${guest.id}/edit`}>
           Edit Guest
         </SecondaryButton>
 
-        <SecondaryButton href={`/guest/${guest.id}/delete`}>
+        <SecondaryButton href={`/admin/guest/${guest.id}/delete`}>
           Delete Guest
         </SecondaryButton>
 
-        <SecondaryButton href="/view">
+        <SecondaryButton href="/admin/view">
           Back to Guest List
         </SecondaryButton>
       </div>

@@ -45,7 +45,7 @@ export default function DeleteConfirmationCard({
             {isLoading ? 'Deleting...' : 'Delete Guest'}
           </Button>
 
-          <SecondaryButton href="/view">
+          <SecondaryButton href="/admin/view">
             Cancel
           </SecondaryButton>
         </div>

@@ -54,7 +54,7 @@ export default function GuestForm({
         </Button>
 
         {showCancel && (
-          <SecondaryButton href="/view">
+          <SecondaryButton href="/admin/view">
             Cancel
           </SecondaryButton>
         )}
