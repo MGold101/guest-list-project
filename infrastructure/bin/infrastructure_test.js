@@ -1,5 +1,9 @@
 #!/usr/bin/env node
 
+require('dotenv').config({
+  path: '.env.local',
+});
+
 const cdk = require('aws-cdk-lib/core');
 const { InfrastructureTestStack } = require('../lib/infrastructure_test-stack');
 
