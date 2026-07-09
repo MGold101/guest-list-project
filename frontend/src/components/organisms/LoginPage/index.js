@@ -62,7 +62,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background bg-[radial-gradient(circle_at_top_left,_rgba(121,208,182,0.25),_transparent_35%),linear-gradient(135deg,_#F4F7F5_0%,_#E7F3EF_100%)] px-6 py-10">
+    <main className="flex min-h-screen items-center justify-center bg-background bg-[radial-gradient(circle_at_top_left,rgba(121,208,182,0.25),transparent_35%),linear-gradient(135deg,#F4F7F5_0%,#E7F3EF_100%)] px-6 py-10">
       <section className="grid w-full max-w-5xl overflow-hidden rounded-3xl border border-border/70 bg-surface shadow-2xl shadow-slate-300/50 md:grid-cols-[1fr_1.1fr]">
         <div className="hidden bg-navbar p-10 text-white md:flex md:flex-col md:justify-between">
           <div>
