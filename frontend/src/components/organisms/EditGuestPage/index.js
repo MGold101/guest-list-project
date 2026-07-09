@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 
 import PageHeading from '@/components/atoms/PageHeading';
+import BodyText from '@/components/atoms/BodyText';
 import Alert from '@/components/atoms/Alert';
-
 import GuestForm from '@/components/molecules/GuestForm';
 import PageLayout from '@/components/organisms/PageLayout';
 
@@ -80,7 +80,17 @@ export default function EditGuestId({ id }) {
 
   return (
     <PageLayout>
-      <PageHeading>Edit Guest</PageHeading>
+      <div className="mb-8">
+        <div className="mb-3 inline-flex rounded-full bg-accent-soft px-3 py-1 text-sm font-semibold text-primary">
+          Admin Dashboard
+        </div>
+
+        <PageHeading>Edit Guest</PageHeading>
+
+        <BodyText>
+          Update this guest&apos;s details and keep the guest list accurate.
+        </BodyText>
+      </div>
 
       <GuestForm
         formData={formData}

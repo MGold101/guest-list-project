@@ -1,7 +1,6 @@
-import Button from '@/components/atoms/Button';
-import SecondaryButton from '@/components/atoms/SecondaryButton';
 import Input from '@/components/atoms/Input';
 import Label from '@/components/atoms/Label';
+import FormActions from '@/components/molecules/FormActions';
 
 export default function LoginForm({
   formData,
@@ -34,15 +33,12 @@ export default function LoginForm({
         />
       </div>
 
-      <div className="flex gap-3 pt-2">
-        <Button type="submit" disabled={isLoading}>
-          {isLoading ? 'Logging in...' : 'Login'}
-        </Button>
-
-        <SecondaryButton href="/">
-          Back
-        </SecondaryButton>
-      </div>
+      <FormActions
+        submitLabel="Login"
+        loadingLabel="Logging in..."
+        isLoading={isLoading}
+        cancelHref="/"
+      />
     </form>
   );
 }

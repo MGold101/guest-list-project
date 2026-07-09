@@ -3,10 +3,33 @@
 import { useRouter } from 'next/navigation';
 
 import BodyText from '@/components/atoms/BodyText';
+import Button from '@/components/atoms/Button';
 import GuestTableRow from '@/components/molecules/GuestTableRow';
 
 export default function GuestTable({ guests }) {
   const router = useRouter();
+
+  if (guests.length === 0) {
+    return (
+      <div className="rounded-xl border border-dashed border-border bg-surface-muted px-6 py-10 text-center">
+        <p className="text-lg font-semibold text-foreground">
+          No guests found
+        </p>
+
+        <div className="mx-auto mt-2 max-w-md">
+          <BodyText>
+            Add your first guest or adjust your search to find matching results.
+          </BodyText>
+        </div>
+
+        <div className="mt-6">
+          <Button href="/admin/add">
+            Add Guest
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="overflow-hidden rounded-xl border border-border bg-surface">

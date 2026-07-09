@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import PageHeading from '@/components/atoms/PageHeading';
+import BodyText from '@/components/atoms/BodyText';
 import Alert from '@/components/atoms/Alert';
 import GuestForm from '@/components/molecules/GuestForm';
 import PageLayout from '@/components/organisms/PageLayout';
@@ -56,14 +57,24 @@ export default function AddGuestPage() {
         type: 'error',
         text: error.message,
       });
-    }finally {
+    } finally {
       setIsLoading(false);
     }
   }
 
   return (
     <PageLayout>
-      <PageHeading>Add Guest</PageHeading>
+      <div className="mb-8">
+        <div className="mb-3 inline-flex rounded-full bg-accent-soft px-3 py-1 text-sm font-semibold text-primary">
+          Admin Dashboard
+        </div>
+
+        <PageHeading>Add Guest</PageHeading>
+
+        <BodyText>
+          Enter a guest&apos;s details to add them to the admin guest list.
+        </BodyText>
+      </div>
 
       <GuestForm
         formData={formData}

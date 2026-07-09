@@ -5,11 +5,11 @@ export default function PageLayout({
   showNavbar = true,
 }) {
   return (
-    <main className="min-h-screen bg-background px-6 py-8">
+    <main className="min-h-screen bg-background bg-[radial-gradient(circle_at_top_left,_rgba(121,208,182,0.12),_transparent_35%),linear-gradient(180deg,_#F4F7F5_0%,_#EDF4F1_100%)] px-4 py-6 sm:px-6 sm:py-8">
       <div className="mx-auto w-full max-w-5xl">
         {showNavbar && <Navbar />}
 
-        <section className="rounded-2xl bg-surface p-8 shadow-md">
+        <section className="rounded-3xl border border-border/70 bg-surface/95 p-6 shadow-xl shadow-slate-200/60 backdrop-blur sm:p-8">
           {children}
         </section>
       </div>

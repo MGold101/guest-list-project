@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 
 import GuestListHeader from '@/components/molecules/GuestListHeader';
 import GuestTable from '@/components/molecules/GuestTable';
-import SearchInput from '@/components/molecules/SearchInput';
 import PageLayout from '@/components/organisms/PageLayout';
 
 import { getGuests } from '@/services/guestService';
@@ -34,11 +33,10 @@ export default function ViewGuestsPage() {
 
   return (
     <PageLayout>
-      <GuestListHeader />
-
-      <SearchInput
-        value={searchTerm}
-        onChange={(event) => setSearchTerm(event.target.value)}
+      <GuestListHeader
+        guestCount={guests.length}
+        searchTerm={searchTerm}
+        onSearchChange={(event) => setSearchTerm(event.target.value)}
       />
 
       <GuestTable guests={filteredGuests} />

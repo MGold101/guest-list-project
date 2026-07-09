@@ -4,9 +4,10 @@ import Label from '@/components/atoms/Label';
 export default function SearchInput({
   value,
   onChange,
+  className = 'mb-6 max-w-md',
 }) {
   return (
-    <div className="mb-6 max-w-md">
+    <div className={className}>
       <Label htmlFor="guestSearch">Search Guests</Label>
 
       <Input

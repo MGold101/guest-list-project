@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import PageHeading from '@/components/atoms/PageHeading';
+import BodyText from '@/components/atoms/BodyText';
 import Alert from '@/components/atoms/Alert';
 import LoginForm from '@/components/molecules/LoginForm';
-import PageLayout from '@/components/organisms/PageLayout';
 
 import { loginAdmin } from '@/services/authService';
 
@@ -62,21 +62,52 @@ export default function LoginPage() {
   }
 
   return (
-    <PageLayout showNavbar={false}>
-      <PageHeading>Admin Login</PageHeading>
+    <main className="flex min-h-screen items-center justify-center bg-background bg-[radial-gradient(circle_at_top_left,_rgba(121,208,182,0.25),_transparent_35%),linear-gradient(135deg,_#F4F7F5_0%,_#E7F3EF_100%)] px-6 py-10">
+      <section className="grid w-full max-w-5xl overflow-hidden rounded-3xl border border-border/70 bg-surface shadow-2xl shadow-slate-300/50 md:grid-cols-[1fr_1.1fr]">
+        <div className="hidden bg-navbar p-10 text-white md:flex md:flex-col md:justify-between">
+          <div>
+            <div className="mb-6 inline-flex rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-navbar-muted">
+              Admin Portal
+            </div>
 
-      <LoginForm
-        formData={formData}
-        onChange={handleChange}
-        onSubmit={handleSubmit}
-        isLoading={isLoading}
-      />
+            <h1 className="text-4xl font-bold leading-tight">
+              Manage your guest list with confidence.
+            </h1>
 
-      {message && (
-        <div className="mt-6">
-          <Alert type={message.type}>{message.text}</Alert>
+            <p className="mt-5 text-base leading-relaxed text-navbar-muted">
+              Sign in to access the admin dashboard, manage guests and keep
+              event information organised.
+            </p>
+          </div>
+
+          <p className="text-sm text-navbar-muted">
+            Guest List Manager
+          </p>
         </div>
-      )}
-    </PageLayout>
+
+        <div className="p-8 sm:p-10">
+          <div className="mb-8">
+            <PageHeading>Admin Login</PageHeading>
+
+            <BodyText>
+              Enter your admin credentials to continue to the dashboard.
+            </BodyText>
+          </div>
+
+          <LoginForm
+            formData={formData}
+            onChange={handleChange}
+            onSubmit={handleSubmit}
+            isLoading={isLoading}
+          />
+
+          {message && (
+            <div className="mt-6">
+              <Alert type={message.type}>{message.text}</Alert>
+            </div>
+          )}
+        </div>
+      </section>
+    </main>
   );
 }

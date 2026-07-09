@@ -1,7 +1,6 @@
-import Button from '@/components/atoms/Button';
-import SecondaryButton from '@/components/atoms/SecondaryButton';
 import Input from '@/components/atoms/Input';
 import Label from '@/components/atoms/Label';
+import FormActions from '@/components/molecules/FormActions';
 
 export default function GuestForm({
   formData,
@@ -48,17 +47,13 @@ export default function GuestForm({
         />
       </div>
 
-      <div className="flex gap-3 pt-2">
-        <Button type="submit" disabled={isLoading}>
-          {isLoading ? loadingLabel : submitLabel}
-        </Button>
-
-        {showCancel && (
-          <SecondaryButton href="/admin/view">
-            Cancel
-          </SecondaryButton>
-        )}
-      </div>
+      <FormActions
+        submitLabel={submitLabel}
+        loadingLabel={loadingLabel}
+        isLoading={isLoading}
+        showCancel={showCancel}
+        cancelHref="/admin/view"
+      />
     </form>
   );
 }

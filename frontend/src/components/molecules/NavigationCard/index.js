@@ -1,5 +1,4 @@
 import Button from '@/components/atoms/Button';
-import BodyText from '@/components/atoms/BodyText';
 
 export default function NavigationCard({
   title,
@@ -7,11 +6,19 @@ export default function NavigationCard({
   href,
 }) {
   return (
-    <div className="rounded-xl bg-surface border border-border p-6 shadow-sm">
-      <BodyText>{description}</BodyText>
+    <div className="rounded-2xl border border-border bg-surface p-6 text-left shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+      <p className="text-xl font-bold text-foreground">
+        {title}
+      </p>
 
-      <div className="mt-4">
-        <Button href={href}>{title}</Button>
+      <p className="mt-3 text-sm leading-relaxed text-muted">
+        {description}
+      </p>
+
+      <div className="mt-6">
+        <Button href={href}>
+          Continue
+        </Button>
       </div>
     </div>
   );
