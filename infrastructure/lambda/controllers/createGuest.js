@@ -1,8 +1,13 @@
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const { DynamoDBDocumentClient, PutCommand, ScanCommand } = require('@aws-sdk/lib-dynamodb');
+const {
+  DynamoDBDocumentClient,
+  PutCommand,
+  ScanCommand,
+} = require('@aws-sdk/lib-dynamodb');
 const { randomUUID } = require('crypto');
 const { ZodError } = require('zod');
 
+const pusher = require('../utils/pusher');
 const { jsonResponse } = require('../utils/response');
 const { guestSchema } = require('../validation/guestSchema');
 
@@ -42,6 +47,15 @@ exports.createGuest = async function (event) {
         Item: guest,
       })
     );
+
+    try {
+      await pusher.trigger('guests', 'guest-added', guest);
+    } catch (pusherError) {
+      console.error(
+        'Failed to trigger Pusher guest-added event:',
+        pusherError
+      );
+    }
 
     return jsonResponse(201, {
       message: 'Guest added successfully',
