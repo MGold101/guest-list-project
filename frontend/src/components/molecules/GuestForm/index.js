@@ -10,11 +10,13 @@ export default function GuestForm({
   isLoading = false,
   loadingLabel = 'Saving...',
   showCancel = true,
+  cancelHref = '/admin/view',
 }) {
   return (
-    <form onSubmit={onSubmit} className="grid max-w-xl gap-5">
+    <form onSubmit={onSubmit} className="grid gap-5">
       <div>
         <Label htmlFor="firstName">First Name</Label>
+
         <Input
           id="firstName"
           name="firstName"
@@ -26,6 +28,7 @@ export default function GuestForm({
 
       <div>
         <Label htmlFor="lastName">Last Name</Label>
+
         <Input
           id="lastName"
           name="lastName"
@@ -37,6 +40,7 @@ export default function GuestForm({
 
       <div>
         <Label htmlFor="email">Email</Label>
+
         <Input
           id="email"
           name="email"
@@ -52,7 +56,7 @@ export default function GuestForm({
         loadingLabel={loadingLabel}
         isLoading={isLoading}
         showCancel={showCancel}
-        cancelHref="/admin/view"
+        cancelHref={cancelHref}
       />
     </form>
   );
