@@ -51,7 +51,10 @@ export default function GuestSignupPage() {
     setIsLoading(true);
 
     try {
-      const data = await createGuest(formData);
+      const data = await createGuest({
+        ...formData,
+        source: 'guest-signup',
+      });
 
       sessionStorage.setItem(
         'registeredGuest',

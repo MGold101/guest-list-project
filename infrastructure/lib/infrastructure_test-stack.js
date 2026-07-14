@@ -36,6 +36,8 @@ class InfrastructureTestStack extends cdk.Stack {
         PUSHER_KEY: process.env.PUSHER_KEY,
         PUSHER_SECRET: process.env.PUSHER_SECRET,
         PUSHER_CLUSTER: process.env.PUSHER_CLUSTER,
+        SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
+        SENDGRID_FROM_EMAIL: process.env.SENDGRID_FROM_EMAIL,
       }
     })
 

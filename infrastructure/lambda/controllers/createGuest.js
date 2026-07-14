@@ -10,6 +10,7 @@ const { ZodError } = require('zod');
 const pusher = require('../utils/pusher');
 const { jsonResponse } = require('../utils/response');
 const { guestSchema } = require('../validation/guestSchema');
+const { sendGuestConfirmationEmail } = require('../services/sendGuestConfirmationEmail');
 
 const client = new DynamoDBClient({});
 const db = DynamoDBDocumentClient.from(client);
@@ -20,9 +21,11 @@ exports.createGuest = async function (event) {
 
     const validatedGuest = guestSchema.parse(body);
 
+    const { source, ...guestDetails } = validatedGuest;
+
     const guest = {
       id: randomUUID(),
-      ...validatedGuest,
+      ...guestDetails,
     };
 
     const existingGuest = await db.send(
@@ -55,6 +58,17 @@ exports.createGuest = async function (event) {
         'Failed to trigger Pusher guest-added event:',
         pusherError
       );
+    }
+
+    if (source === 'guest-signup') {
+      try {
+        await sendGuestConfirmationEmail(guest);
+      } catch (emailError) {
+        console.error(
+          'Failed to send guest confirmation email:',
+          emailError
+        );
+      }
     }
 
     return jsonResponse(201, {
