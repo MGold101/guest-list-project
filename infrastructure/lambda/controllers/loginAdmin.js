@@ -1,4 +1,5 @@
 const { jsonResponse } = require('../utils/response');
+const { generateAdminToken } = require('../utils/jwt');
 
 exports.loginAdmin = async function (event) {
   try {
@@ -22,8 +23,11 @@ exports.loginAdmin = async function (event) {
       });
     }
 
+    const token = generateAdminToken();
+
     return jsonResponse(200, {
       message: 'Login successful.',
+      token,
     });
   } catch (error) {
     console.error(error);

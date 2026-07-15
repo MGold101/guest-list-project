@@ -32,6 +32,7 @@ class InfrastructureTestStack extends cdk.Stack {
         FRONTEND_URL: process.env.FRONTEND_URL,
         ADMIN_USERNAME: process.env.ADMIN_USERNAME,
         ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
+        ADMIN_JWT_SECRET: process.env.ADMIN_JWT_SECRET,
         PUSHER_APP_ID: process.env.PUSHER_APP_ID,
         PUSHER_KEY: process.env.PUSHER_KEY,
         PUSHER_SECRET: process.env.PUSHER_SECRET,
