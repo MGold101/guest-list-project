@@ -48,7 +48,6 @@ export default function LoginPage() {
     try {
       await loginAdmin(formData);
 
-      localStorage.setItem('isAdminLoggedIn', 'true');
       localStorage.setItem('adminUsername', formData.username);
       router.push('/admin/view');
     } catch (error) {
