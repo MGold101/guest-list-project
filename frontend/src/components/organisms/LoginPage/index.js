@@ -51,6 +51,11 @@ export default function LoginPage() {
       localStorage.setItem('adminUsername', formData.username);
       router.push('/admin/view');
     } catch (error) {
+      setFormData((current) => ({
+        ...current,
+        password: '',
+      }));
+
       setMessage({
         type: 'error',
         text: error.message,
