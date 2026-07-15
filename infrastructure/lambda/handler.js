@@ -7,34 +7,77 @@ const {
 } = require('./controllers');
 
 const { emptyResponse, jsonResponse } = require('./utils/response');
+const { verifyAdminToken } = require('./utils/verifyAdminToken');
+
+function addSourceToRequest(event, source) {
+  const body = JSON.parse(event.body || '{}');
+
+  return {
+    ...event,
+    body: JSON.stringify({
+      ...body,
+      source,
+    }),
+  };
+}
 
 exports.main = async function (event) {
+  const path = event.path;
+  const method = event.httpMethod;
 
-  if (event.path === '/admin/login' && event.httpMethod === 'POST') {
-  return loginAdmin(event);
-  }
-
-  if (event.httpMethod === 'OPTIONS') {
+  if (method === 'OPTIONS') {
     return emptyResponse();
   }
 
-  if (event.httpMethod === 'GET') {
-    return getGuests(event);
+  if (path === '/admin/login' && method === 'POST') {
+    return loginAdmin(event);
   }
 
-  if (event.httpMethod === 'POST') {
-    return createGuest(event);
+  if (path === '/guest/signup' && method === 'POST') {
+    const guestSignupEvent = addSourceToRequest(
+      event,
+      'guest-signup'
+    );
+
+    return createGuest(guestSignupEvent);
   }
 
-  if (event.httpMethod === 'PUT') {
-    return updateGuest(event);
+  if (path === '/admin/guests') {
+    const authentication = verifyAdminToken(event);
+
+    if (!authentication.isAuthorized) {
+      return jsonResponse(authentication.statusCode, {
+        message: authentication.message,
+      });
+    }
+
+    if (method === 'GET') {
+      return getGuests(event);
+    }
+
+    if (method === 'POST') {
+      const adminCreateEvent = addSourceToRequest(
+        event,
+        'admin'
+      );
+
+      return createGuest(adminCreateEvent);
+    }
+
+    if (method === 'PUT') {
+      return updateGuest(event);
+    }
+
+    if (method === 'DELETE') {
+      return deleteGuest(event);
+    }
+
+    return jsonResponse(405, {
+      message: 'Method not allowed.',
+    });
   }
 
-  if (event.httpMethod === 'DELETE') {
-    return deleteGuest(event);
-  }
-
-  return jsonResponse(405, {
-    message: 'Method not allowed',
+  return jsonResponse(404, {
+    message: 'Route not found.',
   });
 };

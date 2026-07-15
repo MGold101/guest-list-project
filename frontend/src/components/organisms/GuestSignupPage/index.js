@@ -9,7 +9,7 @@ import Alert from '@/components/atoms/Alert';
 import GuestForm from '@/components/molecules/GuestForm';
 
 import validateGuest from '@/utils/validateGuest';
-import { createGuest } from '@/services/guestService';
+import { signupGuest } from '@/services/guestService';
 
 export default function GuestSignupPage() {
   const router = useRouter();
@@ -51,10 +51,7 @@ export default function GuestSignupPage() {
     setIsLoading(true);
 
     try {
-      const data = await createGuest({
-        ...formData,
-        source: 'guest-signup',
-      });
+      const data = await signupGuest(formData);
 
       sessionStorage.setItem(
         'registeredGuest',

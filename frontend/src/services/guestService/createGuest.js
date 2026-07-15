@@ -1,9 +1,9 @@
-import { API_URL } from './apiConfig';
-
 export async function createGuest(guest) {
-  const response = await fetch(API_URL, {
+  const response = await fetch('/api/admin/guests', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(guest),
   });
 
