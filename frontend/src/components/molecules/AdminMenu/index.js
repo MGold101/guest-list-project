@@ -35,10 +35,18 @@ export default function AdminMenu() {
     };
   }, []);
 
-  function handleLogout() {
-    localStorage.removeItem('isAdminLoggedIn');
-    localStorage.removeItem('adminUsername');
-    router.push('/admin/login');
+  async function handleLogout() {
+    try {
+      await fetch('/api/logout', {
+        method: 'POST',
+      });
+    } catch (error) {
+      console.error('Logout failed:', error);
+    } finally {
+      localStorage.removeItem('adminUsername');
+      router.push('/admin/login');
+      router.refresh();
+    }
   }
 
   return (
