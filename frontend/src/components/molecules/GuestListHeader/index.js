@@ -1,4 +1,5 @@
 import Button from '@/components/atoms/Button';
+import SecondaryButton from '@/components/atoms/SecondaryButton';
 import PageHeading from '@/components/atoms/PageHeading';
 import BodyText from '@/components/atoms/BodyText';
 import SearchInput from '@/components/molecules/SearchInput';
@@ -7,6 +8,8 @@ export default function GuestListHeader({
   guestCount,
   searchTerm,
   onSearchChange,
+  onExport,
+  canExport,
 }) {
   return (
     <div className="mb-8">
@@ -24,9 +27,18 @@ export default function GuestListHeader({
           </BodyText>
         </div>
 
-        <Button href="/admin/add">
-          Add Guest
-        </Button>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <SecondaryButton
+            onClick={onExport}
+            disabled={!canExport}
+          >
+            Export CSV
+          </SecondaryButton>
+
+          <Button href="/admin/add">
+            Add Guest
+          </Button>
+        </div>
       </div>
 
       <div className="mt-8 grid gap-4 lg:grid-cols-[220px_1fr]">

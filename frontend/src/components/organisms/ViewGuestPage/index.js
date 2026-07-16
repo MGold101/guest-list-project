@@ -6,6 +6,7 @@ import GuestListHeader from '@/components/molecules/GuestListHeader';
 import GuestTable from '@/components/molecules/GuestTable';
 import PageLayout from '@/components/organisms/PageLayout';
 
+import exportGuestsToCsv from '@/utils/exportGuestsToCsv';
 import { getGuests } from '@/services/guestService';
 
 export default function ViewGuestsPage() {
@@ -87,6 +88,8 @@ export default function ViewGuestsPage() {
         guestCount={guests.length}
         searchTerm={searchTerm}
         onSearchChange={(event) => setSearchTerm(event.target.value)}
+        onExport={() => exportGuestsToCsv(guests)}
+        canExport={guests.length > 0}
       />
 
       <GuestTable guests={filteredGuests} />
