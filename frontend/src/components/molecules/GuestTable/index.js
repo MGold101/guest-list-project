@@ -4,9 +4,17 @@ import { useRouter } from 'next/navigation';
 
 import BodyText from '@/components/atoms/BodyText';
 import Button from '@/components/atoms/Button';
-import GuestTableRow from '@/components/molecules/GuestTableRow';
 
-export default function GuestTable({ guests }) {
+import GuestTableRow from '@/components/molecules/GuestTableRow';
+import MobileGuestSort from '@/components/molecules/MobileGuestSort';
+import SortableTableHeader from '@/components/molecules/SortableTableHeader';
+
+export default function GuestTable({
+  guests,
+  sortConfig,
+  onSort,
+  onMobileSortChange,
+}) {
   const router = useRouter();
 
   if (guests.length === 0) {
@@ -32,40 +40,58 @@ export default function GuestTable({ guests }) {
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-border bg-surface">
-      <table className="w-full">
-        <thead className="hidden bg-surface-muted md:table-header-group">
-          <tr>
-            <th className="px-5 py-4 text-left">
-              <BodyText>First Name</BodyText>
-            </th>
+    <div>
+      <MobileGuestSort
+        sortConfig={sortConfig}
+        onChange={onMobileSortChange}
+      />
 
-            <th className="px-5 py-4 text-left">
-              <BodyText>Last Name</BodyText>
-            </th>
+      <div className="overflow-hidden rounded-xl border border-border bg-surface">
+        <table className="w-full">
+          <thead className="hidden bg-surface-muted md:table-header-group">
+            <tr>
+              <SortableTableHeader
+                label="First Name"
+                sortKey="firstName"
+                sortConfig={sortConfig}
+                onSort={onSort}
+              />
 
-            <th className="px-5 py-4 text-left">
-              <BodyText>Email</BodyText>
-            </th>
+              <SortableTableHeader
+                label="Last Name"
+                sortKey="lastName"
+                sortConfig={sortConfig}
+                onSort={onSort}
+              />
 
-            <th className="px-5 py-4 text-right">
-              <BodyText>Actions</BodyText>
-            </th>
-          </tr>
-        </thead>
+              <SortableTableHeader
+                label="Email"
+                sortKey="email"
+                sortConfig={sortConfig}
+                onSort={onSort}
+              />
 
-        <tbody className="block md:table-row-group">
-          {guests.map((guest) => (
-            <GuestTableRow
-              key={guest.email}
-              guest={guest}
-              onClick={() =>
-                router.push(`/admin/guest/${encodeURIComponent(guest.id)}`)
-              }
-            />
-          ))}
-        </tbody>
-      </table>
+              <th className="px-5 py-4 text-right">
+                <BodyText>Actions</BodyText>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody className="block md:table-row-group">
+            {guests.map((guest) => (
+              <GuestTableRow
+                key={guest.id}
+                guest={guest}
+                onClick={() =>
+                  router.push(
+                    `/admin/guest/${encodeURIComponent(guest.id)}`
+                  )
+                }
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

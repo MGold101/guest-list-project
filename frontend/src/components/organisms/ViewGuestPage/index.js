@@ -6,12 +6,17 @@ import GuestListHeader from '@/components/molecules/GuestListHeader';
 import GuestTable from '@/components/molecules/GuestTable';
 import PageLayout from '@/components/organisms/PageLayout';
 
+import useGuestUpdates from '@/hooks/useGuestUpdates';
 import exportGuestsToCsv from '@/utils/exportGuestsToCsv';
 import { getGuests } from '@/services/guestService';
 
 export default function ViewGuestsPage() {
   const [guests, setGuests] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [sortConfig, setSortConfig] = useState({
+    key: 'firstName',
+    direction: 'asc',
+  });
 
   useEffect(() => {
     async function loadGuests() {
@@ -22,55 +27,33 @@ export default function ViewGuestsPage() {
     loadGuests();
   }, []);
 
-  useEffect(() => {
-    let pusher;
-    let channel;
-    let isCancelled = false;
+  useGuestUpdates(setGuests);
 
-    async function connectToPusher() {
-      const pusherModule = await import('pusher-js');
-      const Pusher = pusherModule.default ?? pusherModule;
-
-      if (isCancelled) {
-        return;
+  function handleSort(key) {
+    setSortConfig((currentConfig) => {
+      if (currentConfig.key !== key) {
+        return {
+          key,
+          direction: 'asc',
+        };
       }
 
-      pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
-        cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
-      });
+      return {
+        key,
+        direction:
+          currentConfig.direction === 'asc' ? 'desc' : 'asc',
+      };
+    });
+  }
 
-      channel = pusher.subscribe('guests');
+  function handleMobileSortChange(event) {
+    const [key, direction] = event.target.value.split(':');
 
-      channel.bind('guest-added', (guest) => {
-        setGuests((currentGuests) => {
-          const guestAlreadyExists = currentGuests.some(
-            (currentGuest) => currentGuest.id === guest.id
-          );
-
-          if (guestAlreadyExists) {
-            return currentGuests;
-          }
-
-          return [...currentGuests, guest];
-        });
-      });
-    }
-
-    connectToPusher();
-
-    return () => {
-      isCancelled = true;
-
-      if (channel) {
-        channel.unbind_all();
-        channel.unsubscribe();
-      }
-
-      if (pusher) {
-        pusher.disconnect();
-      }
-    };
-  }, []);
+    setSortConfig({
+      key,
+      direction,
+    });
+  }
 
   const filteredGuests = guests.filter((guest) => {
     const searchValue = searchTerm.toLowerCase();
@@ -82,6 +65,25 @@ export default function ViewGuestsPage() {
     );
   });
 
+  const sortedGuests = [...filteredGuests].sort(
+    (firstGuest, secondGuest) => {
+      const firstValue = firstGuest[sortConfig.key] || '';
+      const secondValue = secondGuest[sortConfig.key] || '';
+
+      const comparison = firstValue.localeCompare(
+        secondValue,
+        undefined,
+        {
+          sensitivity: 'base',
+        }
+      );
+
+      return sortConfig.direction === 'asc'
+        ? comparison
+        : -comparison;
+    }
+  );
+
   return (
     <PageLayout>
       <GuestListHeader
@@ -92,7 +94,12 @@ export default function ViewGuestsPage() {
         canExport={guests.length > 0}
       />
 
-      <GuestTable guests={filteredGuests} />
+      <GuestTable
+        guests={sortedGuests}
+        sortConfig={sortConfig}
+        onSort={handleSort}
+        onMobileSortChange={handleMobileSortChange}
+      />
     </PageLayout>
   );
 }
