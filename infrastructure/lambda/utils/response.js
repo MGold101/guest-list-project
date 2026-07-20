@@ -1,26 +1,50 @@
-const headers = {
-  'Access-Control-Allow-Origin': process.env.FRONTEND_URL,
-  'Access-Control-Allow-Headers': 'Content-Type',
-  'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
-};
+const allowedOrigins = (process.env.FRONTEND_URLS || '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+let currentRequestOrigin = null;
+
+function setRequestOrigin(origin) {
+  currentRequestOrigin = origin || null;
+}
+
+function getHeaders() {
+  const headers = {
+    'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+    'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
+    Vary: 'Origin',
+  };
+
+  // Only return the CORS header when the request came from an allowed origin.
+  if (allowedOrigins.includes(currentRequestOrigin)) {
+    headers['Access-Control-Allow-Origin'] = currentRequestOrigin;
+  }
+
+  return headers;
+}
 
 function jsonResponse(statusCode, body) {
   return {
     statusCode,
-    headers,
+    headers: {
+      ...getHeaders(),
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(body),
   };
 }
 
-function emptyResponse(statusCode = 200) {
+function emptyResponse(statusCode = 204) {
   return {
     statusCode,
-    headers,
+    headers: getHeaders(),
     body: '',
   };
 }
 
 module.exports = {
+  setRequestOrigin,
   jsonResponse,
   emptyResponse,
 };

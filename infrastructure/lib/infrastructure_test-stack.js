@@ -31,7 +31,7 @@ class InfrastructureTestStack extends cdk.Stack {
         code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
         environment: {
           TABLE_NAME: guestListTable.tableName,
-          FRONTEND_URL: process.env.FRONTEND_URL,
+          FRONTEND_URLS: process.env.FRONTEND_URLS,
           ADMIN_USERNAME: process.env.ADMIN_USERNAME,
           ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
           ADMIN_JWT_SECRET: process.env.ADMIN_JWT_SECRET,

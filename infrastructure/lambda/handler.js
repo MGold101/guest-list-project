@@ -7,7 +7,12 @@ const {
   getSignupStatus,
 } = require('./controllers');
 
-const { emptyResponse, jsonResponse } = require('./utils/response');
+const {
+  emptyResponse,
+  jsonResponse,
+  setRequestOrigin,
+} = require('./utils/response');
+
 const { verifyAdminToken } = require('./utils/verifyAdminToken');
 
 const API_ENABLED = true;
@@ -28,8 +33,14 @@ exports.main = async function (event) {
   const path = event.path;
   const method = event.httpMethod;
 
+  const requestOrigin =
+    event?.headers?.origin ||
+    event?.headers?.Origin;
+
+  setRequestOrigin(requestOrigin);
+
   if (method === 'OPTIONS') {
-    return emptyResponse();
+    return emptyResponse(204);
   }
 
   if (!API_ENABLED) {
@@ -43,7 +54,7 @@ exports.main = async function (event) {
   }
 
   if (path === '/guest/signup-status' && method === 'GET') {
-    return getSignupStatus();
+    return getSignupStatus(event);
   }
 
   if (path === '/guest/signup' && method === 'POST') {
