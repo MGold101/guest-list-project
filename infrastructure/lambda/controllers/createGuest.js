@@ -7,10 +7,13 @@ const {
 const { randomUUID } = require('crypto');
 const { ZodError } = require('zod');
 
+const { MAX_GUESTS } = require('../config/guestConfig');
 const pusher = require('../utils/pusher');
 const { jsonResponse } = require('../utils/response');
 const { guestSchema } = require('../validation/guestSchema');
-const { sendGuestConfirmationEmail } = require('../services/sendGuestConfirmationEmail');
+const {
+  sendGuestConfirmationEmail,
+} = require('../services/sendGuestConfirmationEmail');
 
 const client = new DynamoDBClient({});
 const db = DynamoDBDocumentClient.from(client);
@@ -27,6 +30,21 @@ exports.createGuest = async function (event) {
       id: randomUUID(),
       ...guestDetails,
     };
+
+    if (source === 'guest-signup') {
+      const guestCount = await db.send(
+        new ScanCommand({
+          TableName: process.env.TABLE_NAME,
+          Select: 'COUNT',
+        })
+      );
+
+      if ((guestCount.Count || 0) >= MAX_GUESTS) {
+        return jsonResponse(409, {
+          message: 'Guest registration is now closed.',
+        });
+      }
+    }
 
     const existingGuest = await db.send(
       new ScanCommand({

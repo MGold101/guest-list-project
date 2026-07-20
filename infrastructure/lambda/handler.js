@@ -4,6 +4,7 @@ const {
   updateGuest,
   deleteGuest,
   loginAdmin,
+  getSignupStatus,
 } = require('./controllers');
 
 const { emptyResponse, jsonResponse } = require('./utils/response');
@@ -31,6 +32,10 @@ exports.main = async function (event) {
 
   if (path === '/admin/login' && method === 'POST') {
     return loginAdmin(event);
+  }
+
+  if (path === '/guest/signup-status' && method === 'GET') {
+    return getSignupStatus();
   }
 
   if (path === '/guest/signup' && method === 'POST') {
