@@ -10,6 +10,8 @@ const {
 const { emptyResponse, jsonResponse } = require('./utils/response');
 const { verifyAdminToken } = require('./utils/verifyAdminToken');
 
+const API_ENABLED = true;
+
 function addSourceToRequest(event, source) {
   const body = JSON.parse(event.body || '{}');
 
@@ -28,6 +30,12 @@ exports.main = async function (event) {
 
   if (method === 'OPTIONS') {
     return emptyResponse();
+  }
+
+  if (!API_ENABLED) {
+    return jsonResponse(503, {
+      message: 'Service temporarily unavailable.',
+    });
   }
 
   if (path === '/admin/login' && method === 'POST') {
