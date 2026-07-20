@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import PageHeading from '@/components/atoms/PageHeading';
@@ -9,7 +9,10 @@ import Alert from '@/components/atoms/Alert';
 import GuestForm from '@/components/molecules/GuestForm';
 
 import validateGuest from '@/utils/validateGuest';
-import { signupGuest } from '@/services/guestService';
+import {
+  getSignupStatus,
+  signupGuest,
+} from '@/services/guestService';
 
 export default function GuestSignupPage() {
   const router = useRouter();
@@ -22,6 +25,33 @@ export default function GuestSignupPage() {
 
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    async function checkSignupStatus() {
+      try {
+        const status = await getSignupStatus();
+
+        if (!status.isOpen) {
+          router.replace('/guest/signup-closed');
+          return;
+        }
+
+        setIsReady(true);
+      } catch (error) {
+        setMessage({
+          type: 'error',
+          text:
+            error.message ||
+            'Unable to check registration availability.',
+        });
+
+        setIsReady(true);
+      }
+    }
+
+    checkSignupStatus();
+  }, [router]);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -60,6 +90,11 @@ export default function GuestSignupPage() {
 
       router.push('/guest/confirmation');
     } catch (error) {
+      if (error.message === 'Guest registration is now closed.') {
+        router.replace('/guest/signup-closed');
+        return;
+      }
+
       setMessage({
         type: 'error',
         text: error.message,
@@ -67,6 +102,10 @@ export default function GuestSignupPage() {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  if (!isReady) {
+    return null;
   }
 
   return (
