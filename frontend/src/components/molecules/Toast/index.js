@@ -8,18 +8,22 @@ export default function Toast({
   onClose,
 }) {
   return (
-    <div className="rounded-lg bg-white shadow-lg border border-gray-200 p-4 flex items-start gap-3">
+    <div className="flex items-start gap-4 rounded-xl border border-border border-l-4 border-l-primary bg-surface p-4 shadow-lg">
+      <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">
+        ✓
+      </div>
+
       <div className="flex-1">
         {title && (
-          <h3 className="font-semibold">
+          <h3 className="text-base font-semibold text-primary">
             {title}
           </h3>
         )}
 
         {message && (
-          <BodyText>
-            {message}
-          </BodyText>
+          <div className="mt-1">
+            <BodyText>{message}</BodyText>
+          </div>
         )}
       </div>
 
@@ -27,7 +31,7 @@ export default function Toast({
         type="button"
         onClick={onClose}
         aria-label="Dismiss notification"
-        className="text-gray-500 hover:text-gray-700"
+        className="rounded-md p-1 text-muted transition-colors hover:bg-surface-muted hover:text-foreground"
       >
         ✕
       </button>
