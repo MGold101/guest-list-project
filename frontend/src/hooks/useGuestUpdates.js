@@ -1,6 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
-export default function useGuestUpdates(setGuests) {
+export default function useGuestUpdates(
+  setGuests,
+  onGuestAdded
+) {
+  const handledGuestIds = useRef(new Set());
+
   useEffect(() => {
     let pusher;
     let channel;
@@ -14,17 +19,23 @@ export default function useGuestUpdates(setGuests) {
         return;
       }
 
-      pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
-        cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
-      });
+      pusher = new Pusher(
+        process.env.NEXT_PUBLIC_PUSHER_KEY,
+        {
+          cluster:
+            process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+        }
+      );
 
       channel = pusher.subscribe('guests');
 
       channel.bind('guest-added', (guest) => {
         setGuests((currentGuests) => {
-          const guestAlreadyExists = currentGuests.some(
-            (currentGuest) => currentGuest.id === guest.id
-          );
+          const guestAlreadyExists =
+            currentGuests.some(
+              (currentGuest) =>
+                currentGuest.id === guest.id
+            );
 
           if (guestAlreadyExists) {
             return currentGuests;
@@ -32,6 +43,11 @@ export default function useGuestUpdates(setGuests) {
 
           return [...currentGuests, guest];
         });
+
+        if (!handledGuestIds.current.has(guest.id)) {
+          handledGuestIds.current.add(guest.id);
+          onGuestAdded?.(guest);
+        }
       });
     }
 
@@ -49,5 +65,5 @@ export default function useGuestUpdates(setGuests) {
         pusher.disconnect();
       }
     };
-  }, [setGuests]);
+  }, [setGuests, onGuestAdded]);
 }

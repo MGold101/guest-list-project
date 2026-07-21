@@ -1,14 +1,15 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import GuestListHeader from '@/components/molecules/GuestListHeader';
 import GuestTable from '@/components/molecules/GuestTable';
 import PageLayout from '@/components/organisms/PageLayout';
 
 import useGuestUpdates from '@/hooks/useGuestUpdates';
-import exportGuestsToCsv from '@/utils/exportGuestsToCsv';
+import useToast from '@/hooks/useToast';
 import { getGuests } from '@/services/guestService';
+import exportGuestsToCsv from '@/utils/exportGuestsToCsv';
 
 export default function ViewGuestsPage() {
   const [guests, setGuests] = useState([]);
@@ -17,6 +18,8 @@ export default function ViewGuestsPage() {
     key: 'firstName',
     direction: 'asc',
   });
+
+  const { showToast } = useToast();
 
   useEffect(() => {
     async function loadGuests() {
@@ -27,7 +30,17 @@ export default function ViewGuestsPage() {
     loadGuests();
   }, []);
 
-  useGuestUpdates(setGuests);
+  const handleGuestAdded = useCallback(
+    (guest) => {
+      showToast({
+        title: 'New Guest Signup',
+        message: `${guest.firstName} ${guest.lastName} has signed up.`,
+      });
+    },
+    [showToast]
+  );
+
+  useGuestUpdates(setGuests, handleGuestAdded);
 
   function handleSort(key) {
     setSortConfig((currentConfig) => {
@@ -89,7 +102,9 @@ export default function ViewGuestsPage() {
       <GuestListHeader
         guestCount={guests.length}
         searchTerm={searchTerm}
-        onSearchChange={(event) => setSearchTerm(event.target.value)}
+        onSearchChange={(event) =>
+          setSearchTerm(event.target.value)
+        }
         onExport={() => exportGuestsToCsv(guests)}
         canExport={guests.length > 0}
       />
