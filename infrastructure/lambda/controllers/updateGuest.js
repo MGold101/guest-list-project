@@ -1,9 +1,15 @@
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const { DynamoDBDocumentClient, UpdateCommand } = require('@aws-sdk/lib-dynamodb');
+const {
+  DynamoDBDocumentClient,
+  UpdateCommand,
+} = require('@aws-sdk/lib-dynamodb');
 const { ZodError } = require('zod');
 
+const pusher = require('../utils/pusher');
 const { jsonResponse } = require('../utils/response');
-const { guestWithIdSchema } = require('../validation/guestSchema');
+const {
+  guestWithIdSchema,
+} = require('../validation/guestSchema');
 
 const client = new DynamoDBClient({});
 const db = DynamoDBDocumentClient.from(client);
@@ -20,7 +26,8 @@ exports.updateGuest = async function (event) {
         Key: {
           id: guest.id,
         },
-        UpdateExpression: 'set firstName = :firstName, lastName = :lastName, email = :email',
+        UpdateExpression:
+          'set firstName = :firstName, lastName = :lastName, email = :email',
         ExpressionAttributeValues: {
           ':firstName': guest.firstName,
           ':lastName': guest.lastName,
@@ -28,6 +35,19 @@ exports.updateGuest = async function (event) {
         },
       })
     );
+
+    try {
+      await pusher.trigger(
+        'guests',
+        'guest-updated',
+        guest
+      );
+    } catch (pusherError) {
+      console.error(
+        'Failed to trigger Pusher guest-updated event:',
+        pusherError
+      );
+    }
 
     return jsonResponse(200, {
       message: 'Guest updated successfully',
@@ -43,7 +63,8 @@ exports.updateGuest = async function (event) {
     console.error(error);
 
     return jsonResponse(500, {
-      message: 'An unexpected error occurred while updating the guest.',
+      message:
+        'An unexpected error occurred while updating the guest.',
     });
   }
 };

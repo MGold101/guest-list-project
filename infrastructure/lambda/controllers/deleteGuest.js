@@ -1,9 +1,15 @@
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
-const { DynamoDBDocumentClient, DeleteCommand } = require('@aws-sdk/lib-dynamodb');
+const {
+  DynamoDBDocumentClient,
+  DeleteCommand,
+} = require('@aws-sdk/lib-dynamodb');
 const { ZodError } = require('zod');
 
+const pusher = require('../utils/pusher');
 const { jsonResponse } = require('../utils/response');
-const { guestIdSchema } = require('../validation/guestSchema');
+const {
+  guestIdSchema,
+} = require('../validation/guestSchema');
 
 const client = new DynamoDBClient({});
 const db = DynamoDBDocumentClient.from(client);
@@ -23,6 +29,17 @@ exports.deleteGuest = async function (event) {
       })
     );
 
+    try {
+      await pusher.trigger('guests', 'guest-deleted', {
+        id,
+      });
+    } catch (pusherError) {
+      console.error(
+        'Failed to trigger Pusher guest-deleted event:',
+        pusherError
+      );
+    }
+
     return jsonResponse(200, {
       message: 'Guest deleted successfully',
       id,
@@ -37,7 +54,8 @@ exports.deleteGuest = async function (event) {
     console.error(error);
 
     return jsonResponse(500, {
-      message: 'An unexpected error occurred while deleting the guest.',
+      message:
+        'An unexpected error occurred while deleting the guest.',
     });
   }
 };

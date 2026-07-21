@@ -70,7 +70,10 @@ exports.createGuest = async function (event) {
     );
 
     try {
-      await pusher.trigger('guests', 'guest-added', guest);
+      await pusher.trigger('guests', 'guest-added', {
+        ...guest,
+        source,
+      });
     } catch (pusherError) {
       console.error(
         'Failed to trigger Pusher guest-added event:',
@@ -103,7 +106,8 @@ exports.createGuest = async function (event) {
     console.error(error);
 
     return jsonResponse(500, {
-      message: 'An unexpected error occurred while creating the guest.',
+      message:
+        'An unexpected error occurred while creating the guest.',
     });
   }
 };
