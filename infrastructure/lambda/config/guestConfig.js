@@ -1,1 +1,1 @@
-module.exports = { MAX_GUESTS: 5, };
+module.exports = { MAX_GUESTS: 20, };
