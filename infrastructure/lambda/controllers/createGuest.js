@@ -46,17 +46,20 @@ exports.createGuest = async function (event) {
       }
     }
 
+    const normalizedEmail = guest.email.toLowerCase();
+
     const existingGuest = await db.send(
       new ScanCommand({
         TableName: process.env.TABLE_NAME,
-        FilterExpression: 'email = :email',
-        ExpressionAttributeValues: {
-          ':email': guest.email,
-        },
+        ProjectionExpression: 'email',
       })
     );
 
-    if (existingGuest.Items?.length > 0) {
+    if (
+      existingGuest.Items?.some(
+        (item) => item.email?.toLowerCase() === normalizedEmail
+      )
+    ) {
       return jsonResponse(409, {
         message: 'A guest with this email already exists',
       });

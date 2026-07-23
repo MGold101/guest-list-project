@@ -1,6 +1,7 @@
 const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
 const {
   DynamoDBDocumentClient,
+  ScanCommand,
   UpdateCommand,
 } = require('@aws-sdk/lib-dynamodb');
 const { ZodError } = require('zod');
@@ -19,6 +20,26 @@ exports.updateGuest = async function (event) {
     const body = JSON.parse(event.body || '{}');
 
     const guest = guestWithIdSchema.parse(body);
+
+    const normalizedEmail = guest.email.toLowerCase();
+    const existingGuest = await db.send(
+      new ScanCommand({
+        TableName: process.env.TABLE_NAME,
+        ProjectionExpression: 'id, email',
+      })
+    );
+
+    if (
+      existingGuest.Items?.some(
+        (item) =>
+          item.id !== guest.id &&
+          item.email?.toLowerCase() === normalizedEmail
+      )
+    ) {
+      return jsonResponse(409, {
+        message: 'A guest with this email already exists',
+      });
+    }
 
     await db.send(
       new UpdateCommand({
