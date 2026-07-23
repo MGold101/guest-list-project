@@ -15,7 +15,6 @@ export default function Toast({
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Trigger the entrance animation
     requestAnimationFrame(() => {
       setIsVisible(true);
     });
