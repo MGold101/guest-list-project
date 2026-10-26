@@ -16,7 +16,6 @@ function getHeaders() {
     Vary: 'Origin',
   };
 
-  // Only return the CORS header when the request came from an allowed origin.
   if (allowedOrigins.includes(currentRequestOrigin)) {
     headers['Access-Control-Allow-Origin'] = currentRequestOrigin;
   }
