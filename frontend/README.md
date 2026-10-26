@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Guest List Manager - Frontend
 
-## Getting Started
+This directory contains the frontend of the Guest List Manager, developed using Next.js, React, JavaScript and Tailwind CSS. It provides the public guest registration interface and the administrator interface for managing event guests.
 
-First, run the development server:
+For the full project overview, architecture and development background, see the [main README](../README.md).
+
+## Features
+
+- Guest registration form with Zod validation.
+- Feedback for duplicate registrations and invalid inputs.
+- Guest capacity restrictions.
+- Administrator login and protected functionality.
+- Guest management, including adding, editing and deleting records.
+- Searching and sorting guests by first name, last name and email.
+- CSV export of guest records.
+- Real-time guest list updates using Pusher.
+- Toast notifications when guests register through the public form.
+
+## Frontend Structure
+
+The frontend follows Atomic Design principles to organise reusable interface components.
+
+```text
+src/
+├── app/
+├── components/
+│   ├── atoms/
+│   ├── molecules/
+│   └── organisms/
+├── context/
+├── hooks/
+├── services/
+└── utils/
+```
+
+The `app` directory contains the application's pages and API routes. Components are organised into atoms, molecules and organisms, while contexts, hooks, services and utilities help separate application functionality from the interface.
+
+## Running Locally
+
+Install the dependencies from the `frontend` directory:
+
+```bash
+npm install
+```
+
+Create a `.env.local` file using `.env.example` as a reference:
+
+```dotenv
+NEXT_PUBLIC_API_URL=
+NEXT_PUBLIC_PUSHER_KEY=
+NEXT_PUBLIC_PUSHER_CLUSTER=
+```
+
+Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+A configured backend API and valid Pusher credentials are required for the relevant functionality to work correctly.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Backend Integration
 
-## Learn More
+The frontend communicates with the AWS backend through Amazon API Gateway. Administrator requests are handled through Next.js API routes, while Pusher provides real-time updates when guest records change.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+For information about the backend and AWS infrastructure, see the [Infrastructure README](../infrastructure/README.md).
